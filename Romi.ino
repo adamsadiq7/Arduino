@@ -225,12 +225,12 @@ void loop(){
     right_velocity = delta_right / elapsed_time; // find speed
     previous_right_encoder = right_encoder; // reset last time encoder
   }
-  Serial.println(right_velocity);
+  // Serial.println(right_velocity);
 
   float measurement = right_velocity;
-  float demand = SAFE_RIGHT_SPEED;
+  float demand = 0.15;
   float error = demand - measurement;
-  float output = right_pid.update(SAFE_RIGHT_SPEED, right_velocity);
+  float output = right_pid.update(demand, right_velocity);
 
   // Serial.println(output);
   //Once you think your error signal is correct
@@ -250,13 +250,13 @@ void loop(){
 
   output = constrain(output, 0, 255);
 
-  // Serial.print(demand);
-  // Serial.print(", ");
-  // Serial.print(right_velocity);
-  // Serial.print(", ");
-  // Serial.println(error);
+  Serial.print(demand);
+  Serial.print(", ");
+  Serial.print(right_velocity);
+  Serial.print(", ");
+  Serial.println(error);
 
-  // analogWrite(R_PWM_PIN, output); // stop the left wheel
+  analogWrite(R_PWM_PIN, output); // stop the left wheel
 
   //Consider switching this delay for a millis()
   //task-schedule block
