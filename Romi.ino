@@ -16,8 +16,8 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 1.0
-#define ki 0.00
+#define kp 0.0
+#define ki 0.01
 #define kd 0.0
 
 /* Variables to remember our
@@ -221,7 +221,7 @@ void loop(){
   elapsed_time = millis() - vel_update;
 
   // calculating speed
-  if (elapsed_time > 20){
+  if (elapsed_time > 50){
     vel_update = millis(); //update time
 
     long diff_count;
@@ -231,9 +231,8 @@ void loop(){
     right_velocity = (float) diff_count;
     right_velocity = right_velocity / (float) elapsed_time;
   }
-  Serial.println(right_velocity);
+  // Serial.println(right_velocity);
 
-  
   
   float fb;
   float output = right_pid.update(demand, right_velocity);
