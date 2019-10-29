@@ -33,8 +33,8 @@ void calculateLeftVelocity(){
   left_elapsed_time = micros() - left_last_timestamp;
   left_velocity = (float)0.15 / (left_elapsed_time / 1000); //so we are working mm per s
 
-  Serial.print("left_velocity:");
-  Serial.println(left_velocity);
+  // Serial.print("left_velocity:");
+  // Serial.println(left_velocity);
 
   left_last_timestamp = micros(); //reset last timestamp
 }
@@ -43,8 +43,8 @@ void calculateRightVelocity(){
   right_elapsed_time = micros() - right_last_timestamp;
   right_velocity = (float)0.15 / (right_elapsed_time / 1000); //so we are working mm per s
 
-  Serial.print("right_velocity:");
-  Serial.println(right_velocity);
+  // Serial.print("right_velocity:");
+  // Serial.println(right_velocity);
 
   right_last_timestamp = micros(); //reset last timestamp
 }
