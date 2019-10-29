@@ -233,8 +233,6 @@ void loop(){
   }
   // Serial.println(right_velocity);
 
-  
-  float fb;
   float output = right_pid.update(demand, right_velocity);
 
   //Once you think your error signal is correct
@@ -242,10 +240,10 @@ void loop(){
   //Send output to motor
 
   //switch direction of motors
-  if (fb > 0){
+  if (output > 0){
     right_motor(1); // forwards
   }
-  else if(fb < 0){
+  else if(output < 0){
     right_motor(-1); //backwards
   }
   else{
