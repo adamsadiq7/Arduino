@@ -257,10 +257,11 @@ void loop(){
   analogWrite(R_PWM_PIN, output); // stop the left wheel
 
   
-  Serial.print(", ");
   Serial.print(measurement);
   Serial.print(", ");
   Serial.print(demand);
+  Serial.print(", ");
+  Serial.print(right_pid.getI());
 
   Serial.print("\n");
 
