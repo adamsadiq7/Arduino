@@ -16,9 +16,9 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp_left 0.00
-#define ki_left 0.00
-#define kd_left 0.00
+#define kp 2.00
+#define ki 0.00
+#define kd 0.00
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
@@ -58,7 +58,7 @@ bool leftWheelDone = false;
 
 bool rightWheelDone = false;
 
-PID left_pid( kp_left, ki_left, kd_left );
+PID right_pid( kp, ki, kd );
 
 void left_motor(float l_speed){
   if (l_speed < 0){
@@ -210,12 +210,34 @@ void setup(){
 
 void loop(){
   // output_signal <-----PID-- demand, measurement
-//  float output = left_PID.update(200, right_encoder);
-  //Serial.println(output);
 
-  //Once oyu thin your error signal is correct
-  //And your PID response is cortrect
+  executingCommand = true;
+  
+  float measurement = right_encoder;
+  float demand = SAFE_RIGHT_SPEED;
+  float error = demand - measurement;
+
+  float output = right_pid.update(20, right_encoder);
+  // Serial.println(output);
+  //Once you think your error signal is correct
+  //And your PID response is correct
   //Send output to motor
+
+  //switch direction of motors
+  if (error > 0){
+    right_motor(1); // forwards
+  }
+  else if(error < 0){
+    right_motor(-1); //backwards
+  }
+  else{
+    output = 0;
+  }
+
+  output = constrain(output, 0, 255);
+
+  analogWrite(R_PWM_PIN, output); // stop the left wheel
+
 
   //Consider switching this delay for a millis()
   //task-schedule block

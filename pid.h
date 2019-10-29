@@ -4,7 +4,8 @@
 
 /*Here, the definition of the PID class begins. This is indicated by the keyword: "class"
 This is a general description of the data and functions that the class contains. 
-To use a class, we must make a specific instance of the class by declaring it into the same way we declare a variable. 
+To use a class, we must make a specific instance of the class by declaring it into the same way we declare a 
+variable. 
 For example, to create a version of the PID class, in our main file we might write:
 
 PID LeftWheelPID;
@@ -206,8 +207,7 @@ float PID::update(float demand, float measurement) {
   return output_signal;
 }
 
-void PID::setMax(float newMax)
-{
+void PID::setMax(float newMax){
   if (newMax > 0) {
     max_output = newMax;
   } else {
