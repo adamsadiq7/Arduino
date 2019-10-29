@@ -228,7 +228,7 @@ void loop(){
   // Serial.println(right_velocity);
 
   float measurement = right_velocity;
-  float demand = 0.15;
+  float demand = 0.5;
   float error = demand - measurement;
   float output = right_pid.update(demand, right_velocity);
 
