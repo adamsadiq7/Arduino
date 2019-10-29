@@ -212,34 +212,41 @@ void setup(){
 void loop(){
   // output_signal <-----PID-- demand, measurement
 
-  executingCommand = true;
+  executingCommand = true; // do not trigger commands above (global space)
 
-  float elapsed_time = millis() - vel_update;
+  float measurement;
+  float demand;
+
+  unsigned long elapsed_time;
+  elapsed_time = millis() - vel_update;
 
   // calculating speed
-  if (elapsed_time > 5){
+  if (elapsed_time > 20){
     vel_update = millis(); //update time
-    delta_right = (float)(right_encoder - previous_right_encoder); // distance covered
-    right_velocity = delta_right / elapsed_time; // find speed
-    previous_right_encoder = right_encoder; // reset last time encoder
-  }
-  // Serial.println(right_velocity);
 
-  float measurement = right_velocity;
-  float demand = 1;
-  float error = demand - measurement;
+    long diff_count;
+    diff_count = right_encoder - previous_right_encoder;
+    previous_right_encoder = right_encoder;
+
+    right_velocity = (float) diff_count;
+    right_velocity = right_velocity / (float) elapsed_time;
+  }
+  Serial.println(right_velocity);
+
+  
+  
+  float fb;
   float output = right_pid.update(demand, right_velocity);
 
-  // Serial.println(output);
   //Once you think your error signal is correct
   //And your PID response is correct
   //Send output to motor
 
   //switch direction of motors
-  if (error > 0){
+  if (fb > 0){
     right_motor(1); // forwards
   }
-  else if(error < 0){
+  else if(fb < 0){
     right_motor(-1); //backwards
   }
   else{
@@ -248,13 +255,16 @@ void loop(){
 
   output = constrain(output, 0, 255);
 
-  // Serial.print(demand);
-  // Serial.print(", ");
-  // Serial.print(right_velocity);
-  // Serial.print(", ");
-  Serial.println(error);
-
   analogWrite(R_PWM_PIN, output); // stop the left wheel
+
+  
+  Serial.print(", ");
+  Serial.print(measurement);
+  Serial.print(", ");
+  Serial.print(demand);
+
+  Serial.print("\n");
+
 
   //Consider switching this delay for a millis()
   //task-schedule block
