@@ -16,9 +16,9 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 0.0
+#define kp 1.0
 #define ki 0.01
-#define kd 0.0
+#define kd 0.2
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
