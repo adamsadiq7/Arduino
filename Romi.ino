@@ -16,7 +16,7 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 2.00
+#define kp 1.00
 #define ki 0.00
 #define kd 0.00
 
@@ -249,8 +249,13 @@ void loop(){
 
   output = constrain(output, 0, 255);
 
-  analogWrite(R_PWM_PIN, output); // stop the left wheel
+  Serial.print(demand);
+  Serial.print(", ");
+  Serial.print(right_velocity);
+  Serial.print(", ");
+  Serial.println(error);
 
+  analogWrite(R_PWM_PIN, output); // stop the left wheel
 
   //Consider switching this delay for a millis()
   //task-schedule block
