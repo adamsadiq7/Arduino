@@ -37,6 +37,9 @@ int totalWheelsDone = 0;
 int previous_right_encoder = 0;
 int previous_left_encoder = 0;
 
+float delta_right = 0;
+float vel_update = 0;
+
 bool movementStarted = false;
 
 bool forwardMotion = false;
@@ -212,12 +215,22 @@ void loop(){
   // output_signal <-----PID-- demand, measurement
 
   executingCommand = true;
-  
-  float measurement = right_encoder;
+
+  float elapsed_time = millis() - vel_update;
+
+  // calculating speed
+  if (elapsed_time > 5){
+    vel_update = millis(); //update time
+    delta_right = (float)(right_encoder - previous_right_encoder); // distance covered
+    right_velocity = delta_right / elapsed_time; // find speed
+    previous_right_encoder = right_encoder; // reset last time encoder
+  }
+
+  float measurement = right_velocity;
   float demand = SAFE_RIGHT_SPEED;
   float error = demand - measurement;
+  float output = right_pid.update(SAFE_RIGHT_SPEED, right_velocity);
 
-  float output = right_pid.update(20, right_encoder);
   // Serial.println(output);
   //Once you think your error signal is correct
   //And your PID response is correct
