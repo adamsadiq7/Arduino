@@ -173,9 +173,9 @@ float PID::update(float demand, float measurement) {
   last_error = error;
 
   //Attenuate above error components by gain values.
-  Kp_output = Kp * integral_error;
+  Kp_output = Kp * error;
   Ki_output = Ki * integral_error;
-  Kd_output = Kd * integral_error;
+  Kd_output = Kd * error_delta;
 
   // Add the three components to get the total output
   // Note: Check the sign of your d gain.  Check that the

@@ -215,7 +215,7 @@ void loop(){
   executingCommand = true; // do not trigger commands above (global space)
 
   float measurement = (float) right_velocity;
-  float demand = 0.3f;
+  float demand = 0.72f;
 
   unsigned long elapsed_time;
   elapsed_time = millis() - vel_update;
