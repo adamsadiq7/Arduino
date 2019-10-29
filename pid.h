@@ -165,7 +165,7 @@ float PID::update(float demand, float measurement) {
   // Note: Check the sign of your d gain.  Check that the
   // Kd_output contribuition is the opposite of any 
   // overshoot you see using the Serial Plotter
-  output_signal = Kp_output + Ki_output + Kd_output;
+  output_signal = Kp_output + Ki_output - Kd_output;
 
   /*
    * ===========================

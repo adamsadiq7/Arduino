@@ -16,9 +16,9 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 0.1
+#define kp 1.0
 #define ki 0.00
-#define kd 0.1
+#define kd 0.0
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
@@ -165,8 +165,6 @@ void calibrate(){
   currentCommand = commands[0];
 }
 
-
-
 // Remember, setup only runs once.
 void setup(){
   /* These two function set up the pin
@@ -228,7 +226,7 @@ void loop(){
   // Serial.println(right_velocity);
 
   float measurement = right_velocity;
-  float demand = 0.5;
+  float demand = 1;
   float error = demand - measurement;
   float output = right_pid.update(demand, right_velocity);
 
