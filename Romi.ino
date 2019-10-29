@@ -250,10 +250,10 @@ void loop(){
 
   output = constrain(output, 0, 255);
 
-  Serial.print(demand);
-  Serial.print(", ");
-  Serial.print(right_velocity);
-  Serial.print(", ");
+  // Serial.print(demand);
+  // Serial.print(", ");
+  // Serial.print(right_velocity);
+  // Serial.print(", ");
   Serial.println(error);
 
   analogWrite(R_PWM_PIN, output); // stop the left wheel
