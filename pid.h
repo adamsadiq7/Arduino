@@ -72,7 +72,8 @@ class PID {
  * Class constructor
  * This runs whenever we create an instance of the class
  */
- PID::PID(float P, float I, float D){
+ PID::PID(float P, float I, float D)
+{
   //Store the gains
   setGains(P, I, D);
   
@@ -139,25 +140,25 @@ float PID::update(float demand, float measurement) {
    * ================================
    */
 
-
   //This represents the error term
   // Decide what your error signal is (demand vs measurement)
   float error;
-  error = -Kp*(demand-measurement);   
+  error = demand - measurement;
   
-  //This represents the error derivative
+  // This represents the error derivative
   // Calculate the change in your error between update()
   float error_delta;
-  //error_delta = ????;
+  error_delta = (error - last_error)/time_delta;
 
   // This represents the error integral.
   // Integrate error over time.
-  //integral_error = ???;
+  integral_error += last_error + error;
+  last_error = error;
 
   //Attenuate above error components by gain values.
-  //Kp_output = Kp * ????;
-  //Ki_output = Ki * ????;
-  //Kd_output = Kd * ????;
+  Kp_output = Kp * integral_error;
+  Ki_output = Ki * integral_error;
+  Kd_output = Kd * integral_error;
 
   // Add the three components to get the total output
   // Note: Check the sign of your d gain.  Check that the
