@@ -16,7 +16,7 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 0.3
+#define kp 0.5
 #define ki 0.01
 #define kd 0.01
 
@@ -215,7 +215,7 @@ void loop(){
   executingCommand = true; // do not trigger commands above (global space)
 
   float measurement = (float) right_velocity;
-  float demand = 0.72f;
+  float demand = 0.375f;
 
   unsigned long elapsed_time;
   elapsed_time = millis() - vel_update;
