@@ -36,6 +36,9 @@ class PID {
     void setDebug(bool state);                      // This function sets the debug flag;
     void printResponse();                          // This function prints the ratio of input to output in a way that is nicely interpreted by the Serial plotter
     void setShowResponse(bool state);             // This functions set the show_response flag
+    float getP();
+    float getI();
+    float getD();
 
   /* Private functions and variables are defined here. These functions / variables cannot be accessed from outside the class.
    * For example, if we try to set the value of Kp in the file "Romi.h", we will get an error (Try it out!) 
@@ -119,6 +122,19 @@ void PID::setGains(float P, float I, float D) {
   Ki = I;
   Kd = D;
 }
+
+float PID::getP(){
+  return Kp;
+}
+
+float PID::getI(){
+  return Ki;
+}
+
+float PID::getD(){
+  return Kd;
+}
+
 
 /*
  * This is the update function. 

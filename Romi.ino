@@ -247,7 +247,9 @@ void loop(){
     right_motor(-1); //backwards
   }
   else{
+    Serial.println("ACHEIVED!\n");
     output = 0;
+    Serial.println("ACHEIVED!\n");
   }
 
   output = constrain(output, 0, 255);
