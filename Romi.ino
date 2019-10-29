@@ -16,9 +16,9 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 0.15
+#define kp 0.3
 #define ki 0.01
-#define kd 0.00
+#define kd 0.01
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
@@ -255,6 +255,7 @@ void loop(){
   output = constrain(output, 0, 255);
 
   analogWrite(R_PWM_PIN, output); // stop the left wheel
+  Serial.print(output);
 
   
   Serial.print(measurement);
