@@ -216,14 +216,14 @@ void loop(){
 
   executingCommand = true; // do not trigger commands above (global space)
 
-  float measurement = (float) right_velocity;
+  float measurement = 0;
   float demand = 5;
 
   unsigned long elapsed_time;
   elapsed_time = millis() - vel_update;
 
   // calculating speed
-  if (elapsed_time > 50){
+  if (elapsed_time > 100){
     vel_update = millis(); //update time
 
     long diff_count;
@@ -233,6 +233,9 @@ void loop(){
     right_velocity = (float) diff_count;
     right_velocity = right_velocity / (float) elapsed_time;
   }
+
+  measurement = right_velocity;
+
   // Serial.println(right_velocity);
 
   float output = right_pid.update(demand, right_velocity);
