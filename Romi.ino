@@ -217,7 +217,7 @@ void loop(){
   executingCommand = true; // do not trigger commands above (global space)
 
   float measurement = 0;
-  float demand = 5;
+  float demand = 0;
 
   float elapsed_time;
   elapsed_time = millis() - vel_update_t;
