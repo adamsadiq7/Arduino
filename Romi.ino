@@ -340,22 +340,25 @@ void loop(){
   output_r = constrain(output_r, 0, 255);
   output_l = constrain(output_l, 0, 255);
 
+  bangBang();
 
   if (forwardMotion){
+    Serial.println("Forward Motion");
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
-  else if (rotateLeft)
-  {
+  else if (rotateLeft){
+    Serial.println("Rotate Left");
     analogWrite(R_PWM_PIN, output_r);
-    analogWrite(L_PWM_PIN, -output_l);
+    analogWrite(L_PWM_PIN, output_l);
   }
-  else if (rotateRight)
-  {
-    analogWrite(R_PWM_PIN, -output_r);
+  else if (rotateRight){
+    Serial.println("Rotate Right");
+    analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
   else{
+    Serial.println("Tight one lad");
     // ngl i have no idea
   }
 
