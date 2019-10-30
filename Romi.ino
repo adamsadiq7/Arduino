@@ -42,6 +42,7 @@ int previous_left_encoder = 0;
 
 float delta_right = 0;
 float vel_update_t = 0;
+float elapsed_time = 0;
 
 bool movementStarted = false;
 
@@ -215,6 +216,36 @@ void setup(){
   Serial.println(" ***Reset*** ");
 }
 
+float calculateRightSpeed(){
+  vel_update_t = millis(); //update time
+
+  float diff_count;
+  diff_count = right_encoder - previous_right_encoder;
+
+  right_velocity = diff_count / elapsed_time;
+  previous_right_encoder = right_encoder; // update last encoder value
+}
+
+
+void printSensorsRaw(){
+  Serial.print(left_sensor.readRaw());
+  Serial.print(", ");
+  Serial.print(middle_sensor.readRaw());
+  Serial.print(", ");
+  Serial.println(right_sensor.readRaw());
+}
+
+void printRightSensor(){
+  Serial.println(right_sensor.readRaw());
+}
+
+void printMiddleSensor(){
+  Serial.println(middle_sensor.readRaw());
+}
+
+void printLeftSensor(){
+  Serial.println(left_sensor.readRaw());
+}
 
 void loop(){
   // output_signal <-----PID-- demand, measurement
@@ -228,27 +259,10 @@ void loop(){
   float measurement = 0;
   float demand = 0;
 
-  float elapsed_time;
   elapsed_time = millis() - vel_update_t;
+  if (elapsed_time > 100) calculateRightSpeed;
 
-  // calculating speed
-  if (elapsed_time > 100){
-    vel_update_t = millis(); //update time
-
-    float diff_count;
-    diff_count = right_encoder - previous_right_encoder;
-
-    right_velocity = diff_count / elapsed_time;
-    previous_right_encoder = right_encoder; // update last encoder value
-  }
-
-
-  Serial.print(left_sensor.readRaw());
-  Serial.print(", ");
-  Serial.print(middle_sensor.readRaw());
-  Serial.print(", ");
-  Serial.println(right_sensor.readRaw());
-
+  printRightSensor();
 
   measurement = right_velocity;
 
@@ -270,30 +284,13 @@ void loop(){
 
   output = constrain(output, 0, 255);
 
-  // Serial.print("output:");
-  // Serial.println(output);
-
   analogWrite(R_PWM_PIN, output);
 
   
-  // Serial.print(measurement);
-  // Serial.print(", ");
-  // Serial.println(demand);
-  // Serial.print(", ");
-  // Serial.print(right_pid.getI());
-
-  // Serial.print("\n");
-
-
-  //Consider switching this delay for a millis()
-  //task-schedule block
   delay(2);
 
-  // build your main code here. 
-  // Call your pid.update() at a regular time interval.
-
+  
   //Receive input to start moving
-
   if (!executingCommand){
     switch (currentCommand){
       case 1: //driveForward
