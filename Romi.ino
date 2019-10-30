@@ -204,6 +204,9 @@ void setup(){
   previous_right_encoder = right_encoder;
 
   calibrate();
+  left_sensor.calibrate();
+  middle_sensor.calibrate();
+  right_sensor.calibrate();
 
   /* Initialise the Serial communication
   so that we can inspect the values of
@@ -227,24 +230,24 @@ float calculateRightSpeed(){
 }
 
 
-void printSensorsRaw(){
-  Serial.print(left_sensor.readRaw());
+void printSensors(){
+  Serial.print(left_sensor.readCalibrated());
   Serial.print(", ");
-  Serial.print(middle_sensor.readRaw());
+  Serial.print(middle_sensor.readCalibrated());
   Serial.print(", ");
-  Serial.println(right_sensor.readRaw());
+  Serial.println(right_sensor.readCalibrated());
 }
 
 void printRightSensor(){
-  Serial.println(right_sensor.readRaw());
+  Serial.println(right_sensor.readCalibrated());
 }
 
 void printMiddleSensor(){
-  Serial.println(middle_sensor.readRaw());
+  Serial.println(middle_sensor.readCalibrated());
 }
 
 void printLeftSensor(){
-  Serial.println(left_sensor.readRaw());
+  Serial.println(left_sensor.readCalibrated());
 }
 
 void loop(){
@@ -262,7 +265,7 @@ void loop(){
   elapsed_time = millis() - vel_update_t;
   if (elapsed_time > 100) calculateRightSpeed;
 
-  printSensorsRaw();
+  printSensors();
 
   measurement = right_velocity;
 
