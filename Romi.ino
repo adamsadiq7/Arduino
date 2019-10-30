@@ -18,7 +18,7 @@
 
 #define kp 0.2
 #define ki 0.01
-#define kd 0.0
+#define kd 0.2
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
