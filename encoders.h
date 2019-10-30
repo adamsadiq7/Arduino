@@ -24,30 +24,30 @@ float left_last_timestamp = 0;
 float right_last_timestamp = 0;
 
 double left_velocity = 0;
-double right_velocity = 0;
+// double right_velocity = 0;
 
 float left_elapsed_time = 0;
 float right_elapsed_time = 0;
 
-void calculateLeftVelocity(){
-  left_elapsed_time = micros() - left_last_timestamp;
-  left_velocity = (float)0.15 / (left_elapsed_time / 1000); //so we are working mm per s
+// void //calculateLeftVelocity(){
+//   left_elapsed_time = micros() - left_last_timestamp;
+//   left_velocity = (float)0.15 / (left_elapsed_time / 1000); //so we are working mm per s
 
-  // Serial.print("left_velocity:");
-  // Serial.println(left_velocity);
+//   // Serial.print("left_velocity:");
+//   // Serial.println(left_velocity);
 
-  left_last_timestamp = micros(); //reset last timestamp
-}
+//   left_last_timestamp = micros(); //reset last timestamp
+// }
 
-void calculateRightVelocity(){
-  right_elapsed_time = micros() - right_last_timestamp;
-  right_velocity = (float)0.15 / (right_elapsed_time / 1000); //so we are working mm per s
+// void //calculateRightVelocity(){
+//   right_elapsed_time = micros() - right_last_timestamp;
+//   right_velocity = (float)0.15 / (right_elapsed_time / 1000); //so we are working mm per s
 
-  // Serial.print("right_velocity:");
-  // Serial.println(right_velocity);
+//   // Serial.print("right_velocity:");
+//   // Serial.println(right_velocity);
 
-  right_last_timestamp = micros(); //reset last timestamp
-}
+//   right_last_timestamp = micros(); //reset last timestamp
+// }
 
 
 
@@ -94,42 +94,42 @@ ISR(INT6_vect){
   switch (state){
     case 1:
       right_encoder--;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // anti-clockwise
 
     case 2:
       right_encoder++;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // clockwise
 
     case 4:
       right_encoder++;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // clockwise
 
     case 7:
       right_encoder--;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // anti-clockwise
 
     case 8:
       right_encoder--;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // anti-clockwise
 
     case 11:
       right_encoder++;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // clockwise
 
     case 13:
       right_encoder++;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // clockwise
 
     case 14:
       right_encoder--;
-      calculateRightVelocity();
+      //calculateRightVelocity();
       break; // anti-clockwise
   }
 
@@ -190,42 +190,42 @@ ISR(PCINT0_vect){
 
     case 1:
       left_encoder--;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // anti-clockwise
 
     case 2:
       left_encoder++;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // clockwise
 
     case 4:
       left_encoder++;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // clockwise
 
     case 7:
       left_encoder--;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // anti-clockwise
 
     case 8:
       left_encoder--;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // anti-clockwise
 
     case 11:
       left_encoder++;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // clockwise
 
     case 13:
       left_encoder++;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // clockwise
 
     case 14:
       left_encoder--;
-      calculateLeftVelocity();
+      //calculateLeftVelocity();
       break; // anti-clockwise
   }
 
