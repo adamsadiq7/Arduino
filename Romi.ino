@@ -343,7 +343,10 @@ void loop(){
   bangBang();
 
   if (forwardMotion){
-    Serial.println("Forward Motion");
+    Serial.print("Forward Motion: ");
+    Serial.print(output_l);
+    Serial.print(", ");
+    Serial.println(output_r);
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
