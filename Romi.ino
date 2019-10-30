@@ -219,7 +219,7 @@ void loop(){
   float measurement = 0;
   float demand = 5;
 
-  unsigned long elapsed_time;
+  float elapsed_time;
   elapsed_time = millis() - vel_update;
 
   // calculating speed
@@ -228,10 +228,10 @@ void loop(){
 
     float diff_count;
     diff_count = right_encoder - previous_right_encoder;
-    previous_right_encoder = right_encoder;
 
-    right_velocity = (float) diff_count;
-    right_velocity = right_velocity / (float) elapsed_time;
+    right_velocity = diff_count / elapsed_time;
+
+    previous_right_encoder = right_encoder; // update last encoder value
   }
 
   measurement = right_velocity;
