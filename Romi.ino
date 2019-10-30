@@ -1,5 +1,6 @@
 #include "encoders.h"
 #include "pid.h"
+#include "line_sensors.h"
 
 // Note that there is no #define for E0_B:.
 // it's a non-standard pin, check out setupLeftEncoder().
@@ -64,6 +65,10 @@ bool leftWheelDone = false;
 bool rightWheelDone = false;
 
 PID right_pid( kp, ki, kd );
+
+LineSensor left_sensor( A2 );
+LineSensor middle_sensor( A3 );
+LineSensor right_sensor( A4 );
 
 void left_motor(float l_speed){
   if (l_speed < 0){
@@ -236,6 +241,14 @@ void loop(){
     right_velocity = diff_count / elapsed_time;
     previous_right_encoder = right_encoder; // update last encoder value
   }
+
+
+  Serial.print(left_sensor.readRaw());
+  Serial.print(", ");
+  Serial.print(middle_sensor.readRaw());
+  Serial.print(", ");
+  Serial.println(right_sensor.readRaw());
+
 
   measurement = right_velocity;
 
