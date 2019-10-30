@@ -4,8 +4,7 @@
 
 /*Here, the definition of the PID class begins. This is indicated by the keyword: "class"
 This is a general description of the data and functions that the class contains. 
-To use a class, we must make a specific instance of the class by declaring it into the same way we declare a 
-variable. 
+To use a class, we must make a specific instance of the class by declaring it into the same way we declare a variable. 
 For example, to create a version of the PID class, in our main file we might write:
 
 PID LeftWheelPID;
@@ -36,9 +35,6 @@ class PID {
     void setDebug(bool state);                      // This function sets the debug flag;
     void printResponse();                          // This function prints the ratio of input to output in a way that is nicely interpreted by the Serial plotter
     void setShowResponse(bool state);             // This functions set the show_response flag
-    float getP();
-    float getI();
-    float getD();
 
   /* Private functions and variables are defined here. These functions / variables cannot be accessed from outside the class.
    * For example, if we try to set the value of Kp in the file "Romi.h", we will get an error (Try it out!) 
@@ -123,19 +119,6 @@ void PID::setGains(float P, float I, float D) {
   Kd = D;
 }
 
-float PID::getP(){
-  return Kp;
-}
-
-float PID::getI(){
-  return Ki;
-}
-
-float PID::getD(){
-  return Kd;
-}
-
-
 /*
  * This is the update function. 
  * This function should be called repeatedly. 
@@ -160,28 +143,27 @@ float PID::update(float demand, float measurement) {
   //This represents the error term
   // Decide what your error signal is (demand vs measurement)
   float error;
-  error = demand - measurement;
+  //error = ????;   
   
-  // This represents the error derivative
+  //This represents the error derivative
   // Calculate the change in your error between update()
   float error_delta;
-  error_delta = (error - last_error)/time_delta;
+  //error_delta = ????;
 
   // This represents the error integral.
   // Integrate error over time.
-  integral_error += last_error + error;
-  last_error = error;
+  //integral_error = ???;
 
   //Attenuate above error components by gain values.
-  Kp_output = Kp * error;
-  Ki_output = Ki * integral_error;
-  Kd_output = Kd * error_delta;
+  //Kp_output = Kp * ????;
+  //Ki_output = Ki * ????;
+  //Kd_output = Kd * ????;
 
   // Add the three components to get the total output
   // Note: Check the sign of your d gain.  Check that the
   // Kd_output contribuition is the opposite of any 
   // overshoot you see using the Serial Plotter
-  output_signal = Kp_output + Ki_output - Kd_output;
+  float total = Kp_output + Ki_output + Kd_output;
 
   /*
    * ===========================
@@ -195,13 +177,13 @@ float PID::update(float demand, float measurement) {
   last_measurement = measurement;
 
   // Catching max in positive sign.
-  if ( output_signal > max_output) {
-    output_signal = max_output;
+  if (total > max_output) {
+    total = max_output;
   } 
 
   // Catching max in negative sign
-  if ( output_signal < -max_output) {
-    output_signal = -max_output;
+  if (total < -max_output) {
+    total = -max_output;
   }
 
   //Print debugging information if required
@@ -220,10 +202,11 @@ float PID::update(float demand, float measurement) {
     printResponse();
   }
   
-  return output_signal;
+  return total;
 }
 
-void PID::setMax(float newMax){
+void PID::setMax(float newMax)
+{
   if (newMax > 0) {
     max_output = newMax;
   } else {
