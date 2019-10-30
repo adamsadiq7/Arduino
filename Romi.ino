@@ -255,16 +255,15 @@ void loop(){
   output = constrain(output, 0, 255);
 
   analogWrite(R_PWM_PIN, output); // stop the left wheel
-  Serial.print(output);
 
   
   Serial.print(measurement);
   Serial.print(", ");
-  Serial.print(demand);
-  Serial.print(", ");
-  Serial.print(right_pid.getI());
+  Serial.println(demand);
+  // Serial.print(", ");
+  // Serial.print(right_pid.getI());
 
-  Serial.print("\n");
+  // Serial.print("\n");
 
 
   //Consider switching this delay for a millis()
