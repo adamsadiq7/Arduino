@@ -236,7 +236,7 @@ void loop(){
 
   measurement = right_velocity;
 
-  // Serial.println(right_velocity);
+  Serial.println(right_velocity);
 
   float output = right_pid.update(demand, right_velocity);
 
@@ -254,15 +254,15 @@ void loop(){
 
   output = constrain(output, 0, 255);
 
-  Serial.print("output:");
-  Serial.println(output);
+  // Serial.print("output:");
+  // Serial.println(output);
 
   analogWrite(R_PWM_PIN, output);
 
   
-  Serial.print(measurement);
-  Serial.print(", ");
-  Serial.println(demand);
+  // Serial.print(measurement);
+  // Serial.print(", ");
+  // Serial.println(demand);
   // Serial.print(", ");
   // Serial.print(right_pid.getI());
 
