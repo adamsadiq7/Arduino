@@ -226,7 +226,7 @@ void loop(){
   if (elapsed_time > 100){
     vel_update = millis(); //update time
 
-    long diff_count;
+    float diff_count;
     diff_count = right_encoder - previous_right_encoder;
     previous_right_encoder = right_encoder;
 
