@@ -40,7 +40,7 @@ int previous_right_encoder = 0;
 int previous_left_encoder = 0;
 
 float delta_right = 0;
-float vel_update = 0;
+float vel_update_t = 0;
 
 bool movementStarted = false;
 
@@ -220,23 +220,23 @@ void loop(){
   float demand = 5;
 
   float elapsed_time;
-  elapsed_time = millis() - vel_update;
+  elapsed_time = millis() - vel_update_t;
 
   // calculating speed
   if (elapsed_time > 100){
-    vel_update = millis(); //update time
+    vel_update_t = millis(); //update time
 
     float diff_count;
     diff_count = right_encoder - previous_right_encoder;
 
     right_velocity = diff_count / elapsed_time;
-
+    Serial.println(right_velocity);
     previous_right_encoder = right_encoder; // update last encoder value
   }
 
   measurement = right_velocity;
 
-  Serial.println(right_velocity);
+  // Serial.println(right_velocity);
 
   float output = right_pid.update(demand, right_velocity);
 
