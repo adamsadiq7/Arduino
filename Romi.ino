@@ -248,15 +248,13 @@ void loop(){
   else if(output < 0){
     right_motor(-1); //backwards
   }
-  else{
-    Serial.println("ACHEIVED!\n");
-    output = 0;
-    Serial.println("ACHEIVED!\n");
-  }
 
   output = constrain(output, 0, 255);
 
-  analogWrite(R_PWM_PIN, output); // stop the left wheel
+  Serial.print("output:");
+  Serial.println(output);
+
+  analogWrite(R_PWM_PIN, output);
 
   
   Serial.print(measurement);
