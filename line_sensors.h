@@ -23,10 +23,12 @@ class LineSensor {
     
   private:
   
-    int pin;
     /*
      * Add any variables needed for calibration here
      */
+    int pin;
+    int first_fifty; // holding first 50 values for the sensor
+    int average_value; // holding average value for sensor
     
 };
 
@@ -50,6 +52,11 @@ void LineSensor::calibrate() {
   /*
    * Write code to calibrate your sensor here
    */
+
+  for (int i = 0; i<50;i++){
+    first_fifty += readRaw();
+  }
+  average_value = first_fifty / 50; //averaging out the value
 }
 
 
@@ -59,6 +66,7 @@ int LineSensor::readCalibrated() {
   /*
    * Write code to return a calibrated reading here
    */
+  return average_value - readRaw();
 }
 
 
