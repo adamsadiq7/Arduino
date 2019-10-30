@@ -74,6 +74,52 @@ LineSensor middle_sensor( A3 );
 LineSensor right_sensor( A4 );
 float threshold = -150;
 
+// Remember, setup only runs once.
+void setup(){
+  /* These two function set up the pin
+  change interrupts for the encoders.
+  If you want to know more, find them
+  at the end of this file. */
+
+  setupLeftEncoder();
+  setupRightEncoder();
+
+  // Set our motor driver pins as outputs.
+  pinMode(L_PWM_PIN, OUTPUT);
+  pinMode(L_DIR_PIN, OUTPUT);
+  pinMode(R_PWM_PIN, OUTPUT);
+  pinMode(R_DIR_PIN, OUTPUT);
+
+  // Set initial direction for l and r
+  digitalWrite(L_DIR_PIN, HIGH);
+  digitalWrite(R_DIR_PIN, HIGH);
+
+  // Set initial l_speed and r_speed values.
+  l_speed = 0;
+  r_speed = 0;
+
+  left_last_timestamp = micros();
+  right_last_timestamp = micros();
+
+  previous_left_encoder = left_encoder;
+  previous_right_encoder = right_encoder;
+
+  calibrate();
+  left_sensor.calibrate();
+  middle_sensor.calibrate();
+  right_sensor.calibrate();
+
+  /* Initialise the Serial communication
+  so that we can inspect the values of
+  our encoder using the Monitor. */
+
+  Serial.begin(9600);
+  delay(1000);
+
+  // Print reset so we can catch any reset error.
+  Serial.println(" ***Reset*** ");
+}
+
 void left_motor(float l_speed){
   if (l_speed < 0){
     digitalWrite(L_DIR_PIN, HIGH); // Backwards for me
@@ -176,52 +222,6 @@ void calibrate(){
   currentCommand = commands[0];
 }
 
-// Remember, setup only runs once.
-void setup(){
-  /* These two function set up the pin
-  change interrupts for the encoders.
-  If you want to know more, find them
-  at the end of this file. */
-
-  setupLeftEncoder();
-  setupRightEncoder();
-
-  // Set our motor driver pins as outputs.
-  pinMode(L_PWM_PIN, OUTPUT);
-  pinMode(L_DIR_PIN, OUTPUT);
-  pinMode(R_PWM_PIN, OUTPUT);
-  pinMode(R_DIR_PIN, OUTPUT);
-
-  // Set initial direction for l and r
-  digitalWrite(L_DIR_PIN, HIGH);
-  digitalWrite(R_DIR_PIN, HIGH);
-
-  // Set initial l_speed and r_speed values.
-  l_speed = 0;
-  r_speed = 0;
-
-  left_last_timestamp = micros();
-  right_last_timestamp = micros();
-
-  previous_left_encoder = left_encoder;
-  previous_right_encoder = right_encoder;
-
-  calibrate();
-  left_sensor.calibrate();
-  middle_sensor.calibrate();
-  right_sensor.calibrate();
-
-  /* Initialise the Serial communication
-  so that we can inspect the values of
-  our encoder using the Monitor. */
-
-  Serial.begin(9600);
-  delay(1000);
-
-  // Print reset so we can catch any reset error.
-  Serial.println(" ***Reset*** ");
-}
-
 float calculateRightSpeed(){
   vel_update_t = millis(); //update time
 
@@ -309,14 +309,13 @@ void loop(){
     calculateLeftSpeed();
   }
 
-  // printSensors();
-
-  measurement_l = right_velocity;
+  measurement_l = left_velocity;
+  measurement_r = right_velocity;
 
   // Serial.println(right_velocity);
 
-  float output_r = right_pid.update(demand, right_velocity);
-  float output_l = left_pid.update(demand, left_velocity);
+  float output_l = left_pid.update(demand, measurement_l);
+  float output_r = right_pid.update(demand, measurement_r);
 
   //Once you think your error signal is correct
   //And your PID response is correct
@@ -372,10 +371,14 @@ void loop(){
   
 
 
-  // THIS IS FOR HARDCODED SET COMMANDS
 
 
 
+
+
+
+
+  /* ------THIS IS FOR HARDCODED SET COMMANDS ------*/
 
   //Receive input to start moving
   if (!executingCommand){
@@ -536,21 +539,6 @@ void loop(){
       }
     }
   }
-
-  /* Output the count values for our encoders
-  with a comma seperation, which allows for
-  two lines to be drawn on the Plotter.
-
-  NOTE: left_encoder and right_encoder values are now
-  automatically updated by the ISR when the encoder pins change.
-
-  //Serial.print(left_encoder);
-  //Serial.print(", ");
-  //Serial.println(right_encoder);
-
-  // short delay so that our plotter graph keeps
-
-  // some history.*/
 
   delay(2);
 }
