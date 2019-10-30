@@ -215,6 +215,10 @@ void loop(){
   // output_signal <-----PID-- demand, measurement
 
   executingCommand = true; // do not trigger commands above (global space)
+  forwardMotion = false;
+  rotateLeft = false;
+  rotateRight = false;
+  backwardMotion = false;
 
   float measurement = 0;
   float demand = 0;
@@ -230,7 +234,6 @@ void loop(){
     diff_count = right_encoder - previous_right_encoder;
 
     right_velocity = diff_count / elapsed_time;
-    Serial.println(right_velocity);
     previous_right_encoder = right_encoder; // update last encoder value
   }
 
