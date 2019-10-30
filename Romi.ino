@@ -262,9 +262,21 @@ void loop(){
   float measurement = 0;
   float demand = 0;
 
+  float threshold = -100;
+
   elapsed_time = millis() - vel_update_t;
   if (elapsed_time > 100) calculateRightSpeed;
 
+  if (left_sensor.readCalibrated() < -100){
+    Serial.println("Left sensor on line");
+  }
+  if (middle_sensor.readCalibrated() < -100){
+    Serial.println("Middle sensor on line");
+  }
+  if (right_sensor.readCalibrated() < -100){
+    Serial.println("Right sensor on line");
+  }
+  
   printSensors();
 
   measurement = right_velocity;
