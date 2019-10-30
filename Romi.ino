@@ -262,7 +262,7 @@ void loop(){
   elapsed_time = millis() - vel_update_t;
   if (elapsed_time > 100) calculateRightSpeed;
 
-  printLeftSensor();
+  printSensorsRaw();
 
   measurement = right_velocity;
 
