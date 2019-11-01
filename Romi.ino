@@ -19,7 +19,7 @@
 
 #define kp 400
 #define ki 5
-#define kd 0.0
+#define kd 100
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
