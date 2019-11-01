@@ -17,8 +17,8 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 2
-#define ki 0.1
+#define kp 20
+#define ki 1
 #define kd 0.0
 
 /* Variables to remember our
@@ -300,7 +300,7 @@ void loop(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 10;
+  float demand = 0.3;
 
   elapsed_time = millis() - vel_update_t;
 
