@@ -329,27 +329,27 @@ void loop(){
   output_l = constrain(output_l, 0, 255);
 
 
-  Serial.print("(");
-  Serial.print(left_velocity);
-  Serial.print(", ");
-  Serial.print(right_velocity);
-  Serial.print(")");
-  Serial.print("  ");
-
   // Serial.print("(");
-  // Serial.print(demand-measurement_l);
+  // Serial.print(left_velocity);
+  // Serial.print(", ");
+  // Serial.print(right_velocity);
   // Serial.print(")");
   // Serial.print("  ");
 
-  Serial.print("(");
-  Serial.print(demand-measurement_l);
-  Serial.print(", ");
-  Serial.print(demand-measurement_r);
-  Serial.println(")");
-  
-  forwardMotion = true;
+  // // Serial.print("(");
+  // // Serial.print(demand-measurement_l);
+  // // Serial.print(")");
+  // // Serial.print("  ");
 
-  // bangBang();
+  // Serial.print("(");
+  // Serial.print(demand-measurement_l);
+  // Serial.print(", ");
+  // Serial.print(demand-measurement_r);
+  // Serial.println(")");
+  
+  // forwardMotion = true;
+
+  bangBang();
 
   if (forwardMotion){
     // Serial.print("Forward Motion: ");
