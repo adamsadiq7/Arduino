@@ -17,7 +17,7 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 30
+#define kp 40
 #define ki 1
 #define kd 0.0
 
