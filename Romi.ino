@@ -336,15 +336,15 @@ void loop(){
   Serial.print(")");
   Serial.print("  ");
 
-  Serial.print("(");
-  Serial.print(demand);
-  Serial.print(")");
-  Serial.print("  ");
+  // Serial.print("(");
+  // Serial.print(demand-measurement_l);
+  // Serial.print(")");
+  // Serial.print("  ");
 
   Serial.print("(");
-  Serial.print(output_l);
+  Serial.print(demand-measurement_l);
   Serial.print(", ");
-  Serial.print(output_r);
+  Serial.print(demand-measurement_r);
   Serial.println(")");
   
   forwardMotion = true;

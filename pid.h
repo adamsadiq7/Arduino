@@ -148,7 +148,7 @@ float PID::update(float demand, float measurement) {
   //This represents the error derivative
   // Calculate the change in your error between update()
   float error_delta;
-  error_delta = (error - last_error);
+  error_delta = (error - last_error)/time_delta;
 
   // This represents the error integral.
   // Integrate error over time.
