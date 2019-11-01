@@ -1,7 +1,7 @@
 #include "encoders.h"
 #include "pid.h"
 #include "line_sensors.h"
-#include <cmath.h> 
+#include <math.h> 
 
 // Note that there is no #define for E0_B:.
 // it's a non-standard pin, check out setupLeftEncoder().
