@@ -352,27 +352,35 @@ void loop(){
   bangBang();
 
   if (forwardMotion){
-    // Serial.print("Forward Motion: ");
-    // Serial.print(right_velocity);
-    // Serial.print(", ");
-    // Serial.println(left_velocity);
-    // Serial.println(demand);
+    Serial.print("Forward Motion: ");
+
+    right_motor(1); // forwards
+    left_motor(1); // forwards
+
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
   else if (rotateLeft){
     Serial.println("Rotate Left");
+
+    right_motor(1); // forwards
+    left_motor(-1); // backwards
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
   else if (rotateRight){
     Serial.println("Rotate Right");
+
+    right_motor(-1); // forwards
+    left_motor(1); // backwards
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
   else{
     Serial.println("Tight one lad");
     // ngl i have no idea
+    right_motor(-1); // backwards
+    left_motor(-1); // backwards
   }
 
   delay(2);
