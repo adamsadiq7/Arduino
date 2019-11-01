@@ -1,6 +1,7 @@
 #include "encoders.h"
 #include "pid.h"
 #include "line_sensors.h"
+#include <cmath> 
 
 // Note that there is no #define for E0_B:.
 // it's a non-standard pin, check out setupLeftEncoder().
@@ -262,28 +263,57 @@ void printLeftSensor(){
 }
 
 void bangBang(){
-  if (middle_sensor.readCalibrated() < threshold && left_sensor.readCalibrated() < threshold && right_sensor.readCalibrated() < threshold){
-    forwardMotion = true;
 
-    rotateLeft = false;
-    rotateRight = false;
-  }
-  else if (left_sensor.readCalibrated() < threshold){
+  float total = left_sensor.readCalibrated() + middle_sensor.readCalibrated() + right_sensor.readCalibrated();
+
+  float p_left = left_sensor.readCalibrated() / total;
+  float p_middle = middle_sensor.readCalibrated() / total;
+  float p_right = right_sensor.readCalibrated() / total;
+
+  float p_lineCentre = round(p_left * 1 + p_middle * 2 + p_right * 3); - 2;
+
+  if (p_lineCentre == -1){
     rotateLeft = true;
 
     rotateRight = false;
     forwardMotion = false;
   }
-  else if (right_sensor.readCalibrated() < threshold){
+  else if(p_lineCentre == 1){
     rotateRight = true;
 
     rotateLeft = false;
     forwardMotion = false;
   }
-  else{
-    //whitespace, just go forward until we got itt
+  else if (p_lineCentre == 0){
     forwardMotion = true;
+
+    rotateRight = false;
+    rotateLeft = false;
   }
+
+  // // we are on the black line
+  // if (middle_sensor.readCalibrated() < threshold){
+  //   forwardMotion = true;
+
+  //   rotateLeft = false;
+  //   rotateRight = false;
+  // }
+  // else if (left_sensor.readCalibrated() < threshold){
+  //   rotateLeft = true;
+
+  //   rotateRight = false;
+  //   forwardMotion = false;
+  // }
+  // else if (right_sensor.readCalibrated() < threshold){
+  //   rotateRight = true;
+
+  //   rotateLeft = false;
+  //   forwardMotion = false;
+  // }
+  // else{
+  //   //whitespace, just go forward until we got itt
+  //   forwardMotion = true;
+  // }
 }
 
 void loop(){
