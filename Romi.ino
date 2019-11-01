@@ -65,6 +65,8 @@ bool leftWheelDone = false;
 
 bool rightWheelDone = false;
 
+bool foundLine = false;
+
 PID right_pid( kp, ki, kd );
 PID left_pid( kp, ki, kd );
 
@@ -264,56 +266,63 @@ void printLeftSensor(){
 
 void bangBang(){
 
-  float total = left_sensor.readCalibrated() + middle_sensor.readCalibrated() + right_sensor.readCalibrated();
+  // float total = left_sensor.readCalibrated() + middle_sensor.readCalibrated() + right_sensor.readCalibrated();
 
-  float p_left = left_sensor.readCalibrated() / total;
-  float p_middle = middle_sensor.readCalibrated() / total;
-  float p_right = right_sensor.readCalibrated() / total;
+  // float p_left = left_sensor.readCalibrated() / total;
+  // float p_middle = middle_sensor.readCalibrated() / total;
+  // float p_right = right_sensor.readCalibrated() / total;
 
-  float p_lineCentre = round(p_left * 1 + p_middle * 2 + p_right * 3); - 2;
+  // float p_lineCentre = round(p_left * 1 + p_middle * 2 + p_right * 3); - 2;
 
-  if (p_lineCentre == -1){
-    rotateLeft = true;
-
-    rotateRight = false;
-    forwardMotion = false;
-  }
-  else if(p_lineCentre == 1){
-    rotateRight = true;
-
-    rotateLeft = false;
-    forwardMotion = false;
-  }
-  else if (p_lineCentre == 0){
-    forwardMotion = true;
-
-    rotateRight = false;
-    rotateLeft = false;
-  }
-
-  // // we are on the black line
-  // if (middle_sensor.readCalibrated() < threshold){
-  //   forwardMotion = true;
-
-  //   rotateLeft = false;
-  //   rotateRight = false;
-  // }
-  // else if (left_sensor.readCalibrated() < threshold){
+  // if (p_lineCentre == -1){
   //   rotateLeft = true;
 
   //   rotateRight = false;
   //   forwardMotion = false;
   // }
-  // else if (right_sensor.readCalibrated() < threshold){
+  // else if(p_lineCentre == 1){
   //   rotateRight = true;
 
   //   rotateLeft = false;
   //   forwardMotion = false;
   // }
-  // else{
-  //   //whitespace, just go forward until we got itt
+  // else if (p_lineCentre == 0){
   //   forwardMotion = true;
+
+  //   rotateRight = false;
+  //   rotateLeft = false;
   // }
+  if (middle_sensor.readCalibrated > threshold){
+    foundLine = false;
+  }
+
+  // we are on the black line
+  if (middle_sensor.readCalibrated() < threshold){
+    foundLine = true;
+    forwardMotion = true;
+
+    rotateLeft = false;
+    rotateRight = false;
+  }
+  else if (left_sensor.readCalibrated() < threshold){
+    // if (!foundLine){
+
+    // }
+    rotateLeft = true;
+
+    rotateRight = false;
+    forwardMotion = false;
+  }
+  else if (right_sensor.readCalibrated() < threshold){
+    rotateRight = true;
+
+    rotateLeft = false;
+    forwardMotion = false;
+  }
+  else{
+    //whitespace, just go forward until we got itt
+    forwardMotion = true;
+  }
 }
 
 void loop(){
@@ -328,7 +337,7 @@ void loop(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.15;
+  float demand = 0.1;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
