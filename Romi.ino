@@ -337,16 +337,21 @@ void loop(){
   output_r = constrain(output_r, 0, 255);
   output_l = constrain(output_l, 0, 255);
 
+
+  Serial.print(output_l);
+  Serial.print(", ");
+  Serial.println(output_r);
+  Serial.println(demand);
   forwardMotion = true;
 
   // bangBang();
 
   if (forwardMotion){
     Serial.print("Forward Motion: ");
-    Serial.print(right_velocity);
-    Serial.print(", ");
-    Serial.println(left_velocity);
-    Serial.println(demand);
+    // Serial.print(right_velocity);
+    // Serial.print(", ");
+    // Serial.println(left_velocity);
+    // Serial.println(demand);
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
