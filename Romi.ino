@@ -359,7 +359,7 @@ void loop(){
 
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
-  }
+  } 
   else if (rotateLeft){
     Serial.println("Rotate Left");
 
