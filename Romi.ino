@@ -339,9 +339,9 @@ void loop(){
 
 
   Serial.print("(");
-  Serial.print(output_l);
+  Serial.print(left_velocity);
   Serial.print(", ");
-  Serial.print(output_r);
+  Serial.print(right_velocity);
   Serial.print(")");
   Serial.print("  ");
 
