@@ -18,7 +18,7 @@
 #define SAFE_RIGHT_SPEED 20
 
 #define kp 2
-#define ki 0.
+#define ki 0.01
 #define kd 0.0
 
 /* Variables to remember our
@@ -347,7 +347,7 @@ void loop(){
   // bangBang();
 
   if (forwardMotion){
-    Serial.print("Forward Motion: ");
+    // Serial.print("Forward Motion: ");
     // Serial.print(right_velocity);
     // Serial.print(", ");
     // Serial.println(left_velocity);
