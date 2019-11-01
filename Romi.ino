@@ -262,7 +262,7 @@ void printLeftSensor(){
 }
 
 void bangBang(){
-  if (middle_sensor.readCalibrated() < threshold){
+  if (middle_sensor.readCalibrated() < threshold && left_sensor.readCalibrated() < threshold && right_sensor.readCalibrated() < threshold){
     forwardMotion = true;
 
     rotateLeft = false;
