@@ -302,12 +302,6 @@ void loop(){
 
   float demand = 0.3;
 
-  elapsed_time = millis() - vel_update_t;
-
-  if (elapsed_time > 100) {
-    calculateRightSpeed();
-    calculateLeftSpeed();
-  }
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
