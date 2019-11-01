@@ -27,8 +27,6 @@ motor speeds for Left and Right.*/
 float l_speed;
 float r_speed;
 
-float right_velocity = 0;
-
 float left_goal = 0;
 float right_goal = 0;
 
@@ -222,25 +220,25 @@ void calibrate(){
   currentCommand = commands[0];
 }
 
-float calculateRightSpeed(){
-  vel_update_t = millis(); //update time
+// float calculateRightSpeed(){
+//   vel_update_t = millis(); //update time
 
-  float diff_count;
-  diff_count = right_encoder - previous_right_encoder;
+//   float diff_count;
+//   diff_count = right_encoder - previous_right_encoder;
 
-  right_velocity = diff_count / elapsed_time;
-  previous_right_encoder = right_encoder; // update last encoder value
-}
+//   right_velocity = diff_count / elapsed_time;
+//   previous_right_encoder = right_encoder; // update last encoder value
+// }
 
-float calculateLeftSpeed(){
-  vel_update_t = millis(); //update time
+// float calculateLeftSpeed(){
+//   vel_update_t = millis(); //update time
 
-  float diff_count;
-  diff_count = left_encoder - previous_left_encoder;
+//   float diff_count;
+//   diff_count = left_encoder - previous_left_encoder;
 
-  left_velocity = diff_count / elapsed_time;
-  previous_left_encoder = left_encoder; // update last encoder value
-}
+//   left_velocity = diff_count / elapsed_time;
+//   previous_left_encoder = left_encoder; // update last encoder value
+// }
 
 
 void printSensors(){
@@ -301,7 +299,6 @@ void loop(){
   float measurement_r = 0;
 
   float demand = 0.3;
-
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
