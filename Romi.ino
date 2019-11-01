@@ -312,8 +312,6 @@ void loop(){
   measurement_l = left_velocity;
   measurement_r = right_velocity;
 
-  // Serial.println(right_velocity);
-
   float output_l = left_pid.update(demand, measurement_l);
   float output_r = right_pid.update(demand, measurement_r);
 
@@ -339,13 +337,16 @@ void loop(){
   output_r = constrain(output_r, 0, 255);
   output_l = constrain(output_l, 0, 255);
 
-  bangBang();
+  forwardMotion = true;
+
+  // bangBang();
 
   if (forwardMotion){
     Serial.print("Forward Motion: ");
     Serial.print(output_l);
     Serial.print(", ");
     Serial.println(output_r);
+    Serial.println(demand);
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
   }
