@@ -308,18 +308,15 @@ void bangBang(){
     rotateRight = false;
   }
   else if (left_sensor.readCalibrated() < threshold){
-    // if (!foundLine){
-
-    // }
     rotateRight = true;
 
     rotateLeft = false;
     forwardMotion = false;
   }
   else if (right_sensor.readCalibrated() < threshold){
-    rotateRight = true;
+    rotateLeft = true;
 
-    rotateLeft = false;
+    rotateRight = false;
     forwardMotion = false;
   }
   else{
