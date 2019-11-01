@@ -25,7 +25,7 @@
 motor speeds for Left and Right.*/
 
 float l_speed;
-float r_speed;
+float r_speed; 
 
 float left_goal = 0;
 float right_goal = 0;
