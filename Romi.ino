@@ -17,7 +17,7 @@
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
-#define kp 1
+#define kp 0.5
 #define ki 0.00
 #define kd 0.0
 
@@ -300,7 +300,7 @@ void loop(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.375;
+  float demand = 10;
 
   elapsed_time = millis() - vel_update_t;
 
@@ -343,9 +343,9 @@ void loop(){
 
   if (forwardMotion){
     Serial.print("Forward Motion: ");
-    Serial.print(output_l);
+    Serial.print(right_velocity);
     Serial.print(", ");
-    Serial.println(output_r);
+    Serial.println(left_velocity);
     Serial.println(demand);
     analogWrite(R_PWM_PIN, output_r);
     analogWrite(L_PWM_PIN, output_l);
