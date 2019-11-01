@@ -72,7 +72,8 @@ class PID {
  * Class constructor
  * This runs whenever we create an instance of the class
  */
- PID::PID(float P, float I, float D){
+ PID::PID(float P, float I, float D)
+{
   //Store the gains
   setGains(P, I, D);
   
@@ -139,31 +140,30 @@ float PID::update(float demand, float measurement) {
    * ================================
    */
 
-
   //This represents the error term
   // Decide what your error signal is (demand vs measurement)
   float error;
-  error = -Kp*(demand-measurement);   
+  error = demand - measurement;
   
   //This represents the error derivative
   // Calculate the change in your error between update()
   float error_delta;
-  //error_delta = ????;
+  error_delta = (error - last_error)/time_delta;
 
   // This represents the error integral.
   // Integrate error over time.
-  //integral_error = ???;
+  integral_error *= time_delta;
 
   //Attenuate above error components by gain values.
-  //Kp_output = Kp * ????;
-  //Ki_output = Ki * ????;
-  //Kd_output = Kd * ????;
+  Kp_output = Kp * error;
+  Ki_output = Ki * integral_error;
+  Kd_output = Kd * error_delta;
 
   // Add the three components to get the total output
   // Note: Check the sign of your d gain.  Check that the
   // Kd_output contribuition is the opposite of any 
   // overshoot you see using the Serial Plotter
-  output_signal = Kp_output + Ki_output + Kd_output;
+  float total = Kp_output + Ki_output - Kd_output;
 
   /*
    * ===========================
@@ -177,13 +177,13 @@ float PID::update(float demand, float measurement) {
   last_measurement = measurement;
 
   // Catching max in positive sign.
-  if ( output_signal > max_output) {
-    output_signal = max_output;
+  if (total > max_output) {
+    total = max_output;
   } 
 
   // Catching max in negative sign
-  if ( output_signal < -max_output) {
-    output_signal = -max_output;
+  if (total < -max_output) {
+    total = -max_output;
   }
 
   //Print debugging information if required
@@ -202,7 +202,7 @@ float PID::update(float demand, float measurement) {
     printResponse();
   }
   
-  return output_signal;
+  return total;
 }
 
 void PID::setMax(float newMax)
