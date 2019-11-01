@@ -292,9 +292,9 @@ void bangBang(){
   //   rotateRight = false;
   //   rotateLeft = false;
   // }
-  if (middle_sensor.readCalibrated > threshold){
-    foundLine = false;
-  }
+  // if (middle_sensor.readCalibrated > threshold){
+  //   foundLine = false;
+  // }
 
   // we are on the black line
   if (middle_sensor.readCalibrated() < threshold){
