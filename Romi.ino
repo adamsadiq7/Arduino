@@ -18,7 +18,7 @@
 #define SAFE_RIGHT_SPEED 20
 
 #define kp 2
-#define ki 0.01
+#define ki 0.1
 #define kd 0.0
 
 /* Variables to remember our
