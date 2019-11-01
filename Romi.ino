@@ -296,8 +296,11 @@ void bangBang(){
   //   foundLine = false;
   // }
 
+
+  //you need to turn left or right until the middle sensor has found it
+
   // we are on the black line
-  if (middle_sensor.readCalibrated() < threshold){
+  if (middle_sensor.readCalibrated() < threshold && ){
     foundLine = true;
     forwardMotion = true;
 
@@ -308,9 +311,9 @@ void bangBang(){
     // if (!foundLine){
 
     // }
-    rotateLeft = true;
+    rotateRight = true;
 
-    rotateRight = false;
+    rotateLeft = false;
     forwardMotion = false;
   }
   else if (right_sensor.readCalibrated() < threshold){
