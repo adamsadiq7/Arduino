@@ -338,8 +338,7 @@ void loop(){
   output_l = constrain(output_l, 0, 255);
 
 
-  Serial.print(output_l);
-  Serial.print(", ");
+  Serial.println(output_l);
   Serial.println(output_r);
   Serial.println(demand);
   forwardMotion = true;
