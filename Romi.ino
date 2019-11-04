@@ -416,10 +416,12 @@ void loop(){
       analogWrite(L_PWM_PIN, output_l);
     }
     else{
-      digitalWrite(BUZZER_PIN, HIGH);   
-      delay(100);                       
-      digitalWrite(BUZZER_PIN, LOW);    
-      delay(100);                       
+      digitalWrite(BUZZER_PIN, HIGH);
+      delay(1000);
+      digitalWrite(BUZZER_PIN, LOW);
+      delay(1000);           
+      analogWrite(R_PWM_PIN, 0);
+      analogWrite(L_PWM_PIN, 0); 
     }
   } 
   else if (rotateLeft){
@@ -433,9 +435,11 @@ void loop(){
     }
     else{
       digitalWrite(BUZZER_PIN, HIGH);   
-      delay(100);                       
+      delay(1000);                       
       digitalWrite(BUZZER_PIN, LOW);    
-      delay(100);   
+      delay(1000); 
+      analogWrite(R_PWM_PIN, 0);
+      analogWrite(L_PWM_PIN, 0);   
     }
   }
   else if (rotateRight){
@@ -449,9 +453,11 @@ void loop(){
     }
     else{
       digitalWrite(BUZZER_PIN, HIGH);   
-      delay(100);                       
+      delay(1000);                       
       digitalWrite(BUZZER_PIN, LOW);    
-      delay(100);   
+      delay(1000);  
+      analogWrite(R_PWM_PIN, 0);
+      analogWrite(L_PWM_PIN, 0);  
     }
   }
   else{
@@ -463,7 +469,7 @@ void loop(){
     digitalWrite(BUZZER_PIN, HIGH);   
     delay(1000);                       
     digitalWrite(BUZZER_PIN, LOW);    
-    delay(1000);   
+    delay(1000);
   }
 
   delay(2);
