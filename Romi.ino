@@ -74,7 +74,7 @@ PID left_pid( kp, ki, kd );
 LineSensor left_sensor( A2 );
 LineSensor middle_sensor( A3 );
 LineSensor right_sensor( A4 );
-float threshold = -150;
+float threshold = -200;
 
 // Remember, setup only runs once.
 void setup(){
