@@ -15,6 +15,8 @@
 #define R_PWM_PIN 9
 #define R_DIR_PIN 15
 
+#define BUZZER_PIN 6
+
 #define SAFE_LEFT_SPEED 23
 #define SAFE_RIGHT_SPEED 20
 
@@ -74,7 +76,7 @@ PID left_pid( kp, ki, kd );
 LineSensor left_sensor( A2 );
 LineSensor middle_sensor( A3 );
 LineSensor right_sensor( A4 );
-float threshold = -200;
+float threshold = -300;
 
 // Remember, setup only runs once.
 void setup(){
@@ -91,6 +93,8 @@ void setup(){
   pinMode(L_DIR_PIN, OUTPUT);
   pinMode(R_PWM_PIN, OUTPUT);
   pinMode(R_DIR_PIN, OUTPUT);
+  // Set pin 6 (buzzer) to output.
+  pinMode( BUZZER_PIN, OUTPUT);
 
   // Set initial direction for l and r
   digitalWrite(L_DIR_PIN, HIGH);
@@ -407,6 +411,12 @@ void loop(){
       analogWrite(R_PWM_PIN, output_r);
       analogWrite(L_PWM_PIN, output_l);
     }
+    else{
+      digitalWrite(BUZZER_PIN, HIGH);   
+      delay(100);                       
+      digitalWrite(BUZZER_PIN, LOW);    
+      delay(100);                       
+    }
   } 
   else if (rotateLeft){
     Serial.println("Rotate Left");
@@ -416,6 +426,12 @@ void loop(){
     if (!stop){
       analogWrite(R_PWM_PIN, output_r);
       analogWrite(L_PWM_PIN, output_l);
+    }
+    else{
+      digitalWrite(BUZZER_PIN, HIGH);   
+      delay(100);                       
+      digitalWrite(BUZZER_PIN, LOW);    
+      delay(100);   
     }
   }
   else if (rotateRight){
@@ -427,12 +443,23 @@ void loop(){
       analogWrite(R_PWM_PIN, output_r);
       analogWrite(L_PWM_PIN, output_l);
     }
+    else{
+      digitalWrite(BUZZER_PIN, HIGH);   
+      delay(100);                       
+      digitalWrite(BUZZER_PIN, LOW);    
+      delay(100);   
+    }
   }
   else{
     Serial.println("Tight one lad");
     // ngl i have no idea
     right_motor(-1); // backwards
     left_motor(-1); // backwards
+
+    digitalWrite(BUZZER_PIN, HIGH);   
+    delay(1000);                       
+    digitalWrite(BUZZER_PIN, LOW);    
+    delay(1000);   
   }
 
   delay(2);
