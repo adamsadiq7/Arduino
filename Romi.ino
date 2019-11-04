@@ -66,6 +66,7 @@ bool leftWheelDone = false;
 bool rightWheelDone = false;
 
 bool foundLine = false;
+bool stop = false;
 
 PID right_pid( kp, ki, kd );
 PID left_pid( kp, ki, kd );
@@ -308,18 +309,24 @@ void bangBang(){
     rotateRight = false;
   }
   else if (left_sensor.readCalibrated() < threshold){
+    foundLine = true;
     rotateRight = true;
+
 
     rotateLeft = false;
     forwardMotion = false;
   }
   else if (right_sensor.readCalibrated() < threshold){
+    foundLine = true;
     rotateLeft = true;
 
     rotateRight = false;
     forwardMotion = false;
   }
   else{
+    if (foundLine){
+      stop = true;
+    }
     //whitespace, just go forward until we got itt
     forwardMotion = true;
   }
@@ -337,7 +344,7 @@ void loop(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.1;
+  float demand = 0.07;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
@@ -396,24 +403,30 @@ void loop(){
     right_motor(1); // forwards
     left_motor(1); // forwards
 
-    analogWrite(R_PWM_PIN, output_r);
-    analogWrite(L_PWM_PIN, output_l);
+    if (!stop){
+      analogWrite(R_PWM_PIN, output_r);
+      analogWrite(L_PWM_PIN, output_l);
+    }
   } 
   else if (rotateLeft){
     Serial.println("Rotate Left");
 
     right_motor(1); // forwards
     left_motor(-1); // backwards
-    analogWrite(R_PWM_PIN, output_r);
-    analogWrite(L_PWM_PIN, output_l);
+    if (!stop){
+      analogWrite(R_PWM_PIN, output_r);
+      analogWrite(L_PWM_PIN, output_l);
+    }
   }
   else if (rotateRight){
     Serial.println("Rotate Right");
 
     right_motor(-1); // forwards
     left_motor(1); // backwards
-    analogWrite(R_PWM_PIN, output_r);
-    analogWrite(L_PWM_PIN, output_l);
+    if (!stop){
+      analogWrite(R_PWM_PIN, output_r);
+      analogWrite(L_PWM_PIN, output_l);
+    }
   }
   else{
     Serial.println("Tight one lad");
