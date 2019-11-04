@@ -76,7 +76,7 @@ PID left_pid( kp, ki, kd );
 LineSensor left_sensor( A2 );
 LineSensor middle_sensor( A3 );
 LineSensor right_sensor( A4 );
-float threshold = -300;
+float threshold = -250;
 
 // Remember, setup only runs once.
 void setup(){
@@ -331,6 +331,10 @@ void bangBang(){
     if (foundLine){
       stop = true;
     }
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(100);
+    digitalWrite(BUZZER_PIN, LOW);
+    delay(100);
     //whitespace, just go forward until we got itt
     forwardMotion = true;
   }
