@@ -525,7 +525,6 @@ void loop(){
       rotate();
       calledRotate = true;
       buzz();
-      flashLeds();
     }
     else{
       if (rotated && !setGoal){
