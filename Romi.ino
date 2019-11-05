@@ -366,6 +366,9 @@ void loop(){
   theta += (d_left - d_right)/WHEEL_SEPERATION;
 
   position.update(d_right, theta);
+  Serial.print("position");
+  Serial.println(d_right);
+
   d_right = 0; //resetting gradient for right
   d_left = 0; //resetting gradient for left
 
