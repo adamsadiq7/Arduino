@@ -330,6 +330,12 @@ void rotate(){
   rotateLeft = true;
 }
 
+void buzz(){
+  digitalWrite(6, 200); // stop the left wheel
+  delay(1000);
+  digitalWrite(6, 0); // stop the left wheel
+}
+
 void loop(){
   // output_signal <-----PID-- demand, measurement_l
   
@@ -471,8 +477,6 @@ void loop(){
     delay(3000); //stop for three seconds
     stop = false;
   }
-  
-  
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
@@ -512,14 +516,19 @@ void loop(){
     if (!rotated && !calledRotate){
       rotate();
       calledRotate = true;
+      buzz();
     }
     else{
       if (rotated && !setGoal){
         float x = position.getX();
         float y = position.getY();
-        driveForward(sqrt(x*x + y*y));
+        driveForward(codeTomm(sqrt(x*x + y*y)));
         forwardMotion = true;
+        rotateRight = false;
+        rotateLeft = false;
+        backwardMotion = false;
         setGoal = true;
+        buzz();
       }
     }
 
