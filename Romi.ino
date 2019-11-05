@@ -387,7 +387,7 @@ void loop(){
 
 
   if (buzz){
-    digitalWrite(6, 200);   // turn the LED on (HIGH is the voltage level)
+    analogWrite(6, 200);   // turn the LED on (HIGH is the voltage level)
   }
 
   // Serial.print("(");
