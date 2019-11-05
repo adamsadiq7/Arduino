@@ -526,6 +526,8 @@ void loop(){
     }
     else{
       if (!setGoal){
+        float x = position.getX();
+        float y = position.getY();
         driveForward(sqrt(x*x + y*y));
         forwardMotion = true;
         setGoal = true;
