@@ -54,6 +54,7 @@ bool rotateRight = false;
 bool rotateLeft = false;
 bool hardCode = false;
 bool rotated = false;
+bool calledRotate = false;
 bool setGoal = false;
 // 0 nothing
 // 1 move Forward
@@ -463,18 +464,15 @@ void loop(){
     }
   }
 
-  delay(2);
+
+  if (stop){
+    analogWrite(R_PWM_PIN, 0);
+    analogWrite(L_PWM_PIN, 0);
+    delay(3000); //stop for three seconds
+    stop = false;
+  }
   
   
-  
-  
-
-
-
-
-
-
-
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
@@ -511,12 +509,12 @@ void loop(){
 
   if (goingHome){
 
-    if (!rotated){
+    if (!rotated && !calledRotate){
       rotate();
-      rotated = true;
+      calledRotate = true;
     }
     else{
-      if (!setGoal){
+      if (rotated && !setGoal){
         float x = position.getX();
         float y = position.getY();
         driveForward(sqrt(x*x + y*y));
@@ -581,7 +579,7 @@ void loop(){
           rotateRight = false;
           leftWheelDone = false;
           rightWheelDone = false;
-          setGoal = true;
+          rotated = true;
           //commandFinished();
         }
       }
@@ -599,7 +597,7 @@ void loop(){
           rotateRight = false;
           leftWheelDone = false;
           rightWheelDone = false;
-          setGoal = true;
+          rotated = true;
         }
       }
     }
@@ -607,13 +605,38 @@ void loop(){
     // The current command is to rotate left
 
     if (rotateLeft){
-      if (left_encoder < left_angle_goal){
-        analogWrite(L_PWM_PIN, abs(l_speed));
+      if (right_encoder < right_angle_goal){
+        analogWrite(R_PWM_PIN, abs(r_speed));
       }
       else{
-        rotateLeft = false;
+        rightWheelDone = true;
+        analogWrite(R_PWM_PIN, 0);
+
+        //check if other wheel is still turning
+        if (leftWheelDone && rightWheelDone){
+          rotateRight = false;
+          leftWheelDone = false;
+          rightWheelDone = false;
+          rotated = true;
+          //commandFinished();
+        }
+      }
+
+      if (left_encoder > left_angle_goal){
+        analogWrite(L_PWM_PIN, abs(l_speed));
+      }
+
+      else{
+        leftWheelDone = true;
         analogWrite(L_PWM_PIN, 0);
-        setGoal = true;
+
+        //check if other wheel is still turning
+        if (leftWheelDone && rightWheelDone){
+          rotateRight = false;
+          leftWheelDone = false;
+          rightWheelDone = false;
+          rotated = true;
+        }
       }
     }
 
