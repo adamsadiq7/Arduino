@@ -324,6 +324,8 @@ float codeTomm(float code){
 }
 
 void rotate(){
+  float x = position.getX();
+  float y = position.getY();
   setLeftAngle(atan(y/x));
   rotateLeft = true;
 }
