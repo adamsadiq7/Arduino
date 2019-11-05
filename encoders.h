@@ -28,6 +28,9 @@ float left_velocity = 0;
 float left_elapsed_time = 0;
 float right_elapsed_time = 0;
 
+float d_right = 0;
+float d_left = 0;
+
 void decrementRight(){
  d_right--;
 }
