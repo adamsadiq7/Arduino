@@ -386,9 +386,9 @@ void loop(){
 
 
 
-  if (buzz){
-    analogWrite(6, 200);   // turn the LED on (HIGH is the voltage level)
-  }
+  // if (buzz){
+  //   analogWrite(6, 200);   // turn the LED on (HIGH is the voltage level)
+  // }
 
   // Serial.print("(");
   // Serial.print(left_velocity);
