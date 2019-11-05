@@ -54,6 +54,7 @@ bool rotateRight = false;
 bool rotateLeft = false;
 bool hardCode = false;
 bool rotated = false;
+bool setGoal = false;
 // 0 nothing
 // 1 move Forward
 // 2 right turn
@@ -592,6 +593,7 @@ void loop(){
           rotateRight = false;
           leftWheelDone = false;
           rightWheelDone = false;
+          setGoal = true;
           //commandFinished();
         }
       }
@@ -609,7 +611,7 @@ void loop(){
           rotateRight = false;
           leftWheelDone = false;
           rightWheelDone = false;
-          //commandFinished();
+          setGoal = true;
         }
       }
     }
@@ -623,7 +625,7 @@ void loop(){
       else{
         rotateLeft = false;
         analogWrite(L_PWM_PIN, 0);
-        //commandFinished();
+        setGoal = true;
       }
     }
 
@@ -639,7 +641,7 @@ void loop(){
         // Check if we are not at the end of commands
         backwardMotion = false;
         analogWrite(L_PWM_PIN, 0); //Stop the left wheel
-        //commandFinished();
+        setGoal = true;
       }
 
       // If we haven't met the goal for the right wheel yet, we keep on moving
