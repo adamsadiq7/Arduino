@@ -42,9 +42,6 @@ int totalWheelsDone = 0;
 int previous_right_encoder = 0;
 int previous_left_encoder = 0;
 
-float d_right = 0;
-float d_left = 0;
-
 float delta_right = 0;
 float vel_update_t = 0;
 float elapsed_time = 0;
