@@ -83,7 +83,7 @@ LineSensor right_sensor( A4 );
 
 Kinematics position(0,0,0);
 
-float threshold = -200;
+float threshold = -150;
 
 // Remember, setup only runs once.
 void setup(){
@@ -311,10 +311,6 @@ void bangBang(){
       stop = true;
       goingHome = true;
     }
-    digitalWrite(BUZZER_PIN, HIGH);
-    delay(100);
-    digitalWrite(BUZZER_PIN, LOW);
-    delay(100);
     //whitespace, just go forward until we got itt
     forwardMotion = true;
   }
@@ -417,13 +413,9 @@ void loop(){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else{
-        digitalWrite(BUZZER_PIN, HIGH);
-        delay(1000);
-        digitalWrite(BUZZER_PIN, LOW);
-        delay(1000);           
+      else if (stop){
         analogWrite(R_PWM_PIN, 0);
-        analogWrite(L_PWM_PIN, 0); 
+        analogWrite(L_PWM_PIN, 0);
       }
     } 
     else if (rotateLeft){
@@ -436,12 +428,8 @@ void loop(){
         analogWrite(L_PWM_PIN, output_l);
       }
       else{
-        digitalWrite(BUZZER_PIN, HIGH);   
-        delay(1000);                       
-        digitalWrite(BUZZER_PIN, LOW);    
-        delay(1000); 
         analogWrite(R_PWM_PIN, 0);
-        analogWrite(L_PWM_PIN, 0);   
+        analogWrite(L_PWM_PIN, 0);
       }
     }
     else if (rotateRight){
@@ -454,12 +442,8 @@ void loop(){
         analogWrite(L_PWM_PIN, output_l);
       }
       else{
-        digitalWrite(BUZZER_PIN, HIGH);   
-        delay(1000);                       
-        digitalWrite(BUZZER_PIN, LOW);    
-        delay(1000);  
         analogWrite(R_PWM_PIN, 0);
-        analogWrite(L_PWM_PIN, 0);  
+        analogWrite(L_PWM_PIN, 0);
       }
     }
     else{
@@ -468,9 +452,9 @@ void loop(){
       right_motor(-1); // backwards
       left_motor(-1); // backwards
 
-      digitalWrite(BUZZER_PIN, HIGH);   
-      delay(1000);                       
-      digitalWrite(BUZZER_PIN, LOW);    
+      digitalWrite(BUZZER_PIN, 255);
+      delay(1000);     
+      digitalWrite(BUZZER_PIN, 0);
       delay(1000);
     }
   }
