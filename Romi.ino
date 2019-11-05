@@ -462,11 +462,6 @@ void loop(){
       // ngl i have no idea
       right_motor(-1); // backwards
       left_motor(-1); // backwards
-
-      digitalWrite(BUZZER_PIN, 255);
-      delay(1000);     
-      digitalWrite(BUZZER_PIN, 0);
-      delay(1000);
     }
   }
 
