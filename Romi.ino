@@ -344,7 +344,7 @@ void loop(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.14;
+  float demand = 0.10;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
