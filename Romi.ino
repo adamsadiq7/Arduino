@@ -363,11 +363,11 @@ void loop(){
 
   float d_diff = codeTomm(d_left - d_right);
 
-  theta += (d_left - d_right)/WHEEL_SEPERATION;
+  theta += (d_diff)/WHEEL_SEPERATION;
 
   position.update(d_right, theta);
-  Serial.print("position");
-  Serial.println(d_right);
+  Serial.print("theta ");
+  Serial.println(theta);
 
   d_right = 0; //resetting gradient for right
   d_left = 0; //resetting gradient for left
