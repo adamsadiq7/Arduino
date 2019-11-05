@@ -55,6 +55,7 @@ bool rotateLeft = false;
 bool hardCode = false;
 bool rotated = false;
 bool calledRotate = false;
+int state = 0;
 bool setGoal = false;
 // 0 nothing
 // 1 move Forward
@@ -251,43 +252,11 @@ void printLeftSensor(){
 }
 
 void bangBang(){
-
-  // float total = left_sensor.readCalibrated() + middle_sensor.readCalibrated() + right_sensor.readCalibrated();
-
-  // float p_left = left_sensor.readCalibrated() / total;
-  // float p_middle = middle_sensor.readCalibrated() / total;
-  // float p_right = right_sensor.readCalibrated() / total;
-
-  // float p_lineCentre = round(p_left * 1 + p_middle * 2 + p_right * 3); - 2;
-
-  // if (p_lineCentre == -1){
-  //   rotateLeft = true;
-
-  //   rotateRight = false;
-  //   forwardMotion = false;
-  // }
-  // else if(p_lineCentre == 1){
-  //   rotateRight = true;
-
-  //   rotateLeft = false;
-  //   forwardMotion = false;
-  // }
-  // else if (p_lineCentre == 0){
-  //   forwardMotion = true;
-
-  //   rotateRight = false;
-  //   rotateLeft = false;
-  // }
-  // if (middle_sensor.readCalibrated > threshold){
-  //   foundLine = false;
-  // }
-
-
   //you need to turn left or right until the middle sensor has found it
 
   // we are on the black line
   if (middle_sensor.readCalibrated() < threshold){
-    foundLine = true;
+    state = 2;
     forwardMotion = true;
 
     rotateLeft = false;
@@ -309,7 +278,8 @@ void bangBang(){
     forwardMotion = false;
   }
   else{
-    if (foundLine){
+    if (state == 2){
+      state == 3;
       stop = true;
       goingHome = true;
     }
@@ -330,21 +300,17 @@ void rotate(){
   rotateLeft = true;
 }
 
-void loop(){
-  // output_signal <-----PID-- demand, measurement_l
-  
-  if (!goingHome){
-    executingCommand = true; // do not trigger commands above (global space)
-    forwardMotion = false;
-    rotateLeft = false;
-    rotateRight = false;
-    backwardMotion = false;
-  }
+void foundLineBeeps(){
+  executingCommand = true; // do not trigger commands above (global space)
+  forwardMotion = false;
+  rotateLeft = false;
+  rotateRight = false;
+  backwardMotion = false;
 
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.09;
+  float demand = 0.07;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
@@ -383,31 +349,10 @@ void loop(){
   output_r = constrain(output_r, 0, 255);
   output_l = constrain(output_l, 0, 255);
 
-
-  // Serial.print("(");
-  // Serial.print(left_velocity);
-  // Serial.print(", ");
-  // Serial.print(right_velocity);
-  // Serial.print(")");
-  // Serial.print("  ");
-
-  // // Serial.print("(");
-  // // Serial.print(demand-measurement_l);
-  // // Serial.print(")");
-  // // Serial.print("  ");
-
-  // Serial.print("(");
-  // Serial.print(demand-measurement_l);
-  // Serial.print(", ");
-  // Serial.print(demand-measurement_r);
-  // Serial.println(")");
-  
-  // forwardMotion = true;
-
   bangBang();
 
   if (!goingHome){
-    
+
     if (forwardMotion){
       // Serial.print("Forward Motion: ");
 
@@ -422,7 +367,7 @@ void loop(){
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
-    } 
+    }
     else if (rotateLeft){
       Serial.println("Rotate Left");
 
@@ -456,20 +401,326 @@ void loop(){
       // ngl i have no idea
       right_motor(-1); // backwards
       left_motor(-1); // backwards
+    }
+  }
+}
 
-      digitalWrite(BUZZER_PIN, 255);
-      delay(1000);     
-      digitalWrite(BUZZER_PIN, 0);
-      delay(1000);
+void driveForwards(){
+  executingCommand = true; // do not trigger commands above (global space)
+  forwardMotion = false;
+  rotateLeft = false;
+  rotateRight = false;
+  backwardMotion = false;
+
+  float measurement_l = 0;
+  float measurement_r = 0;
+
+  float demand = 1.00;
+
+  measurement_l = left_velocity;
+  measurement_r = right_velocity;
+
+  float output_l = left_pid.update(demand, measurement_l);
+  float output_r = right_pid.update(demand, measurement_r);
+
+  float d_diff = codeTomm(d_left - d_right);
+
+  theta += (d_diff)/WHEEL_SEPERATION;
+
+  position.update(d_right, theta);
+
+  d_right = 0; //resetting gradient for right
+  d_left = 0; //resetting gradient for left
+
+  //Once you think your error signal is correct
+  //And your PID response is correct
+  //Send output_r to motor
+
+  //switch direction of motors
+  if (output_r > 0){
+    right_motor(1); // forwards
+  }
+  else if(output_r < 0){
+    right_motor(-1); //backwards
+  }
+
+  if (output_l > 0){
+    left_motor(1); // forwards
+  }
+  else if(output_l < 0){
+    left_motor(-1); //backwards
+  }
+
+  output_r = constrain(output_r, 0, 255);
+  output_l = constrain(output_l, 0, 255);
+
+  bangBang();
+
+  if (foundLine){
+    state = 1;
+  }
+
+  if (!goingHome){
+
+    if (forwardMotion){
+      // Serial.print("Forward Motion: ");
+
+      right_motor(1); // forwards
+      left_motor(1); // forwards
+
+      if (!stop || goingHome){
+        analogWrite(R_PWM_PIN, output_r);
+        analogWrite(L_PWM_PIN, output_l);
+      }
+      else if (stop){
+        analogWrite(R_PWM_PIN, 0);
+        analogWrite(L_PWM_PIN, 0);
+      }
+    }
+    else if (rotateLeft){
+      Serial.println("Rotate Left");
+
+      right_motor(1); // forwards
+      left_motor(-1); // backwards
+      if (!stop){
+        analogWrite(R_PWM_PIN, output_r);
+        analogWrite(L_PWM_PIN, output_l);
+      }
+      else{
+        analogWrite(R_PWM_PIN, 0);
+        analogWrite(L_PWM_PIN, 0);
+      }
+    }
+    else if (rotateRight){
+      Serial.println("Rotate Right");
+
+      right_motor(-1); // forwards
+      left_motor(1); // backwards
+      if (!stop){
+        analogWrite(R_PWM_PIN, output_r);
+        analogWrite(L_PWM_PIN, output_l);
+      }
+      else{
+        analogWrite(R_PWM_PIN, 0);
+        analogWrite(L_PWM_PIN, 0);
+      }
+    }
+    else{
+      Serial.println("Tight one lad");
+      // ngl i have no idea
+      right_motor(-1); // backwards
+      left_motor(-1); // backwards
+    }
+  }
+}
+
+void initialisingBeeps(){
+  
+}
+
+void stop(){
+  analogWrite(R_PWM_PIN, 0);
+  analogWrite(L_PWM_PIN, 0);
+  delay(3000); //stop for three seconds
+  state = 4;
+}
+
+void goHome(){
+  
+  if (!rotated && !calledRotate){
+    rotate();
+    calledRotate = true;
+  }
+  else{
+    if (rotated && !setGoal){
+      float x = position.getX();
+      float y = position.getY();
+      driveForward(codeTomm(sqrt(x*x + y*y)));
+      forwardMotion = true;
+      rotateRight = false;
+      rotateLeft = false;
+      backwardMotion = false;
+      setGoal = true;
     }
   }
 
+  // if the current command is to move forward
+  if (forwardMotion){
+    // If we haven't met the goal for the left wheel yet, we keep on moving
+    if (left_encoder < left_goal){
+      // Send speeds to pins, to motor drivers.
+      analogWrite(L_PWM_PIN, output_l);
+    }
 
-  if (stop){
-    analogWrite(R_PWM_PIN, 0);
-    analogWrite(L_PWM_PIN, 0);
-    delay(3000); //stop for three seconds
-    stop = false;
+    // we have finished our command
+    else{
+      leftWheelDone = true;
+      //check if other wheel is still turning
+      if (leftWheelDone && rightWheelDone){
+        forwardMotion = false;
+        leftWheelDone = false;
+        rightWheelDone = false;
+        //commandFinished();
+      }
+      analogWrite(L_PWM_PIN, 0); // stop the left wheel
+    }
+
+    // If we haven't met the goal for the right wheel yet, we keep on moving
+    if (right_encoder < right_goal){
+      // Send speeds to pins, to motor drivers.
+      analogWrite(R_PWM_PIN, output_r);
+    }
+
+    // we have met the goal
+    else{
+      rightWheelDone = true;
+      //check if other wheel is still turning
+      if (leftWheelDone && rightWheelDone){
+        forwardMotion = false;
+        leftWheelDone = false;
+        rightWheelDone = false;
+        //commandFinished();
+      }
+      analogWrite(R_PWM_PIN, 0); //Stop the right wheel
+    }
+  }
+
+  // The current command is to rotate right
+
+  if (rotateRight){
+    if (right_encoder < right_angle_goal){
+      analogWrite(R_PWM_PIN, abs(r_speed));
+    }
+    else{
+      rightWheelDone = true;
+      analogWrite(R_PWM_PIN, 0);
+
+      //check if other wheel is still turning
+      if (leftWheelDone && rightWheelDone){
+        rotateRight = false;
+        leftWheelDone = false;
+        rightWheelDone = false;
+        rotated = true;
+        //commandFinished();
+      }
+    }
+
+    if (left_encoder > left_angle_goal){
+      analogWrite(L_PWM_PIN, abs(l_speed));
+    }
+
+    else{
+      leftWheelDone = true;
+      analogWrite(L_PWM_PIN, 0);
+
+      //check if other wheel is still turning
+      if (leftWheelDone && rightWheelDone){
+        rotateRight = false;
+        leftWheelDone = false;
+        rightWheelDone = false;
+        rotated = true;
+      }
+    }
+  }
+
+  // The current command is to rotate left
+
+  if (rotateLeft){
+    if (right_encoder < right_angle_goal){
+      analogWrite(R_PWM_PIN, abs(r_speed));
+    }
+    else{
+      rightWheelDone = true;
+      analogWrite(R_PWM_PIN, 0);
+
+      //check if other wheel is still turning
+      if (leftWheelDone && rightWheelDone){
+        rotateRight = false;
+        leftWheelDone = false;
+        rightWheelDone = false;
+        rotated = true;
+        //commandFinished();
+      }
+    }
+
+    if (left_encoder > left_angle_goal){
+      analogWrite(L_PWM_PIN, abs(l_speed));
+    }
+
+    else{
+      leftWheelDone = true;
+      analogWrite(L_PWM_PIN, 0);
+
+      //check if other wheel is still turning
+      if (leftWheelDone && rightWheelDone){
+        rotateRight = false;
+        leftWheelDone = false;
+        rightWheelDone = false;
+        rotated = true;
+      }
+    }
+  }
+
+  // if the current command is to move backward
+  if (backwardMotion){
+    // If we haven't met the goal for the left wheel yet, we keep on moving
+    if (left_encoder > left_goal){
+      // Send speeds to pins, to motor drivers.
+      analogWrite(L_PWM_PIN, abs(l_speed));
+    }
+    // we have met the goal
+    else{
+      // Check if we are not at the end of commands
+      backwardMotion = false;
+      analogWrite(L_PWM_PIN, 0); //Stop the left wheel
+      setGoal = true;
+    }
+
+    // If we haven't met the goal for the right wheel yet, we keep on moving
+    if (right_encoder > right_goal){
+      // Send speeds to pins, to motor drivers.
+      analogWrite(R_PWM_PIN, abs(r_speed));
+    }
+
+    // we have met the goal
+    else{
+      // Check if we are not at the end of commands
+      if (command_index < sizeof(commands) - 1){
+        command_index++;
+        currentCommand = commands[command_index];
+        executingCommand = false;
+      }
+
+      // We have finished all commands
+      else{
+        analogWrite(R_PWM_PIN, 0); //Stop the right wheel
+      }
+    }
+  }
+}
+
+void loop(){
+  // output_signal <-----PID-- demand, measurement_l
+ 
+  switch(state) {
+    state = 1;
+      case 0:
+          initialisingBeeps();
+          break;
+      case 1:
+          driveForwards();
+          break;
+      case 2:
+          foundLineBeeps();
+          break;
+      case 3:
+          stop();
+      case 4:
+          goHome();
+          Serial.println("Hello");
+      default:
+          Serial.println("System Error, Unknown state!");
+          break;
   }
 
 
@@ -502,181 +753,6 @@ void loop(){
         executingCommand = true;
         break;
       }
-  }
-
-
-  if (goingHome){
-
-    if (!rotated && !calledRotate){
-      rotate();
-      calledRotate = true;
-    }
-    else{
-      if (rotated && !setGoal){
-        float x = position.getX();
-        float y = position.getY();
-        driveForward(codeTomm(sqrt(x*x + y*y)));
-        forwardMotion = true;
-        rotateRight = false;
-        rotateLeft = false;
-        backwardMotion = false;
-        setGoal = true;
-      }
-    }
-
-    // if the current command is to move forward
-    if (forwardMotion){
-      // If we haven't met the goal for the left wheel yet, we keep on moving
-      if (left_encoder < left_goal){
-        // Send speeds to pins, to motor drivers.
-        analogWrite(L_PWM_PIN, output_l);
-      }
-
-      // we have finished our command
-      else{
-        leftWheelDone = true;
-        //check if other wheel is still turning
-        if (leftWheelDone && rightWheelDone){
-          forwardMotion = false;
-          leftWheelDone = false;
-          rightWheelDone = false;
-          //commandFinished();
-        }
-        analogWrite(L_PWM_PIN, 0); // stop the left wheel
-      }
-
-      // If we haven't met the goal for the right wheel yet, we keep on moving
-      if (right_encoder < right_goal){
-        // Send speeds to pins, to motor drivers.
-        analogWrite(R_PWM_PIN, output_r);
-      }
-
-      // we have met the goal
-      else{
-        rightWheelDone = true;
-        //check if other wheel is still turning
-        if (leftWheelDone && rightWheelDone){
-          forwardMotion = false;
-          leftWheelDone = false;
-          rightWheelDone = false;
-          //commandFinished();
-        }
-        analogWrite(R_PWM_PIN, 0); //Stop the right wheel
-      }
-    }
-
-    // The current command is to rotate right
-
-    if (rotateRight){
-      if (right_encoder < right_angle_goal){
-        analogWrite(R_PWM_PIN, abs(r_speed));
-      }
-      else{
-        rightWheelDone = true;
-        analogWrite(R_PWM_PIN, 0);
-
-        //check if other wheel is still turning
-        if (leftWheelDone && rightWheelDone){
-          rotateRight = false;
-          leftWheelDone = false;
-          rightWheelDone = false;
-          rotated = true;
-          //commandFinished();
-        }
-      }
-
-      if (left_encoder > left_angle_goal){
-        analogWrite(L_PWM_PIN, abs(l_speed));
-      }
-
-      else{
-        leftWheelDone = true;
-        analogWrite(L_PWM_PIN, 0);
-
-        //check if other wheel is still turning
-        if (leftWheelDone && rightWheelDone){
-          rotateRight = false;
-          leftWheelDone = false;
-          rightWheelDone = false;
-          rotated = true;
-        }
-      }
-    }
-
-    // The current command is to rotate left
-
-    if (rotateLeft){
-      if (right_encoder < right_angle_goal){
-        analogWrite(R_PWM_PIN, abs(r_speed));
-      }
-      else{
-        rightWheelDone = true;
-        analogWrite(R_PWM_PIN, 0);
-
-        //check if other wheel is still turning
-        if (leftWheelDone && rightWheelDone){
-          rotateRight = false;
-          leftWheelDone = false;
-          rightWheelDone = false;
-          rotated = true;
-          //commandFinished();
-        }
-      }
-
-      if (left_encoder > left_angle_goal){
-        analogWrite(L_PWM_PIN, abs(l_speed));
-      }
-
-      else{
-        leftWheelDone = true;
-        analogWrite(L_PWM_PIN, 0);
-
-        //check if other wheel is still turning
-        if (leftWheelDone && rightWheelDone){
-          rotateRight = false;
-          leftWheelDone = false;
-          rightWheelDone = false;
-          rotated = true;
-        }
-      }
-    }
-
-    // if the current command is to move backward
-    if (backwardMotion){
-      // If we haven't met the goal for the left wheel yet, we keep on moving
-      if (left_encoder > left_goal){
-        // Send speeds to pins, to motor drivers.
-        analogWrite(L_PWM_PIN, abs(l_speed));
-      }
-      // we have met the goal
-      else{
-        // Check if we are not at the end of commands
-        backwardMotion = false;
-        analogWrite(L_PWM_PIN, 0); //Stop the left wheel
-        setGoal = true;
-      }
-
-      // If we haven't met the goal for the right wheel yet, we keep on moving
-      if (right_encoder > right_goal){
-        // Send speeds to pins, to motor drivers.
-        analogWrite(R_PWM_PIN, abs(r_speed));
-      }
-
-      // we have met the goal
-      else{
-        // Check if we are not at the end of commands
-        if (command_index < sizeof(commands) - 1){
-          command_index++;
-          currentCommand = commands[command_index];
-          executingCommand = false;
-        }
-
-        // We have finished all commands
-        else{
-          analogWrite(R_PWM_PIN, 0); //Stop the right wheel
-        }
-      }
-    }
   }
 
   delay(2);
