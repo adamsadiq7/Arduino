@@ -17,6 +17,8 @@ class Kinematics{
   public:
     
     Kinematics(float x, float y, float theta);   // Constructor, required.
+    float Kinematics::getY();
+    float Kinematics::getX();
     void Kinematics::setConstructor(float x, float y, float theta);
 
     // Write your method functions:
@@ -57,7 +59,13 @@ float mmToCode(float mm){
   return 5.408 * mm; //about correct
 }
 
+float Kinematics::getX(){
+  return x;
+}
 
+float Kinematics::getY(){
+  return y;
+}
 
 float angleToCode(float angle){
   return angle * 8.3;
