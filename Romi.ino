@@ -56,6 +56,7 @@ bool hardCode = false;
 bool rotated = false;
 bool calledRotate = false;
 bool setGoal = false;
+bool buzz = false;
 // 0 nothing
 // 1 move Forward
 // 2 right turn
@@ -384,6 +385,11 @@ void loop(){
   output_l = constrain(output_l, 0, 255);
 
 
+
+  if (buzz){
+    digitalWrite(6, 200);   // turn the LED on (HIGH is the voltage level)
+  }
+
   // Serial.print("(");
   // Serial.print(left_velocity);
   // Serial.print(", ");
@@ -508,6 +514,7 @@ void loop(){
   if (goingHome){
 
     if (!rotated && !calledRotate){
+      buzz = true;
       rotate();
       calledRotate = true;
     }
