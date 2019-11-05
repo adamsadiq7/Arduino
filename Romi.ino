@@ -190,6 +190,7 @@ void turnLeft(float angle){
 void setLeftAngle(float angle){
   // Setting goal for encoder/wheel to reach
   left_angle_goal = left_encoder + angleToCode(angle);
+  right_angle_goal = right_encoder - angleToCode(angle);
 
   //Setting speed of wheel
   l_speed = SAFE_LEFT_SPEED;
@@ -323,18 +324,21 @@ float codeTomm(float code){
 void rotate(){
   float x = position.getX();
   float y = position.getY();
-  setLeftAngle(atan(y/x));
+  // setLeftAngle(atan(y/x));
+  setLeftAngle(27); //testing purposes
   rotateLeft = true;
 }
 
 void loop(){
   // output_signal <-----PID-- demand, measurement_l
   
-  executingCommand = true; // do not trigger commands above (global space)
-  forwardMotion = false;
-  rotateLeft = false;
-  rotateRight = false;
-  backwardMotion = false;
+  if (!goingHome){
+    executingCommand = true; // do not trigger commands above (global space)
+    forwardMotion = false;
+    rotateLeft = false;
+    rotateRight = false;
+    backwardMotion = false;
+  }
 
   float measurement_l = 0;
   float measurement_r = 0;
