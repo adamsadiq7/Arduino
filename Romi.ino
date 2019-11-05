@@ -330,19 +330,6 @@ void rotate(){
   rotateLeft = true;
 }
 
-void buzz(){
-  digitalWrite(6, 200); // stop the left wheel
-  delay(1000);
-  digitalWrite(6, 0); // stop the left wheel
-}
-
-void flashLeds(){
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(100);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(100);                       // wait for a second
-}
-
 void loop(){
   // output_signal <-----PID-- demand, measurement_l
   
@@ -395,7 +382,6 @@ void loop(){
 
   output_r = constrain(output_r, 0, 255);
   output_l = constrain(output_l, 0, 255);
-
 
 
   // Serial.print("(");
@@ -524,7 +510,6 @@ void loop(){
     if (!rotated && !calledRotate){
       rotate();
       calledRotate = true;
-      buzz();
     }
     else{
       if (rotated && !setGoal){
@@ -536,7 +521,6 @@ void loop(){
         rotateLeft = false;
         backwardMotion = false;
         setGoal = true;
-        buzz();
       }
     }
 
