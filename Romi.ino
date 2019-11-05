@@ -415,7 +415,7 @@ void loop(){
   bangBang();
 
   if (forwardMotion){
-    Serial.print("Forward Motion: ");
+    // Serial.print("Forward Motion: ");
 
     right_motor(1); // forwards
     left_motor(1); // forwards
