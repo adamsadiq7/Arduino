@@ -1,6 +1,7 @@
 #include "encoders.h"
 #include "pid.h"
 #include "line_sensors.h"
+#include "kinematics.h"
 #include <math.h> 
 
 // Note that there is no #define for E0_B:.
@@ -41,6 +42,9 @@ int totalWheelsDone = 0;
 int previous_right_encoder = 0;
 int previous_left_encoder = 0;
 
+float d_right = 0;
+float d_left = 0;
+
 float delta_right = 0;
 float vel_update_t = 0;
 float elapsed_time = 0;
@@ -69,6 +73,7 @@ bool rightWheelDone = false;
 
 bool foundLine = false;
 bool stop = false;
+float theta = 0;
 
 PID right_pid( kp, ki, kd );
 PID left_pid( kp, ki, kd );
@@ -76,6 +81,9 @@ PID left_pid( kp, ki, kd );
 LineSensor left_sensor( A2 );
 LineSensor middle_sensor( A3 );
 LineSensor right_sensor( A4 );
+
+Kinematics position(0,0,0);
+
 float threshold = -200;
 
 // Remember, setup only runs once.
@@ -214,14 +222,6 @@ void commandFinished(){
   executingCommand = false;
 }
 
-float mmToCode(float mm){
-  return 5.408 * mm; //about correct
-}
-
-float angleToCode(float angle){
-  return angle * 8.3;
-}
-
 void calibrate(){
   left_encoder = 0;
   right_encoder = 0;
@@ -340,9 +340,13 @@ void bangBang(){
   }
 }
 
+float codeTomm(float code){
+  return code * 0.1849;
+}
+
 void loop(){
   // output_signal <-----PID-- demand, measurement_l
-
+  
   executingCommand = true; // do not trigger commands above (global space)
   forwardMotion = false;
   rotateLeft = false;
@@ -359,6 +363,14 @@ void loop(){
 
   float output_l = left_pid.update(demand, measurement_l);
   float output_r = right_pid.update(demand, measurement_r);
+
+  float d_diff = codeTomm(d_left - d_right);
+
+  theta += (d_left - d_right)/WHEEL_SEPERATION;
+
+  position.update(d_right, theta);
+  d_right = 0; //resetting gradient for right
+  d_left = 0; //resetting gradient for left
 
   //Once you think your error signal is correct
   //And your PID response is correct

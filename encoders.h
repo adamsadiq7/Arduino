@@ -28,6 +28,25 @@ float left_velocity = 0;
 float left_elapsed_time = 0;
 float right_elapsed_time = 0;
 
+void decrementRight(){
+ d_right--;
+}
+
+
+void decrementLeft(){
+ d_left--;
+}
+
+
+void incrementRight(){
+ d_right++;
+}
+
+
+void incrementLeft(){
+ d_left++;
+}
+
 
 void calculateRightVel(){
   right_elapsed_time = micros() - right_last_timestamp;
