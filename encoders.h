@@ -111,41 +111,49 @@ ISR(INT6_vect){
     case 1:
       right_encoder--;
       calculateRightVel();
+      decrementRight();
       break; // anti-clockwise
 
     case 2:
       right_encoder++;
       calculateRightVel();
+      incrementRight();
       break; // clockwise
 
     case 4:
       right_encoder++;
       calculateRightVel();
+      incrementRight();
       break; // clockwise
 
     case 7:
       right_encoder--;
       calculateRightVel();
+      decrementRight();
       break; // anti-clockwise
 
     case 8:
       right_encoder--;
       calculateRightVel();
+      decrementRight();
       break; // anti-clockwise
 
     case 11:
       right_encoder++;
       calculateRightVel();
+      incrementRight();
       break; // clockwise
 
     case 13:
       right_encoder++;
       calculateRightVel();
+      incrementRight();
       break; // clockwise
 
     case 14:
       right_encoder--;
       calculateRightVel();
+      decrementRight();
       break; // anti-clockwise
   }
 
@@ -207,41 +215,49 @@ ISR(PCINT0_vect){
     case 1:
       left_encoder--;
       calculateLeftVel();
+      decrementLeft();
       break; // anti-clockwise
 
     case 2:
       left_encoder++;
       calculateLeftVel();
+      incrementLeft();
       break; // clockwise
 
     case 4:
       left_encoder++;
       calculateLeftVel();
+      incrementLeft();
       break; // clockwise
 
     case 7:
       left_encoder--;
       calculateLeftVel();
+      decrementLeft();
       break; // anti-clockwise
 
     case 8:
       left_encoder--;
       calculateLeftVel();
+      decrementLeft();
       break; // anti-clockwise
 
     case 11:
       left_encoder++;
       calculateLeftVel();
+      incrementLeft();
       break; // clockwise
 
     case 13:
       left_encoder++;
       calculateLeftVel();
+      incrementLeft();
       break; // clockwise
 
     case 14:
       left_encoder--;
       calculateLeftVel();
+      decrementLeft();
       break; // anti-clockwise
   }
 
