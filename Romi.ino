@@ -320,7 +320,7 @@ void foundLineBeeps(){
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-  if(elapsed_time > 20000){
+  if(elapsed_time > 23000){
     demand = 0.07;
   }
   else{
