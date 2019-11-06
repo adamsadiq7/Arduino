@@ -294,6 +294,10 @@ float codeTomm(float code){
   return code * 0.1849;
 }
 
+float radiansToDegrees(float radian){
+  return radian * 57296 / 1000;
+}
+
 void initialisingBeeps(){
    state = 1;
 }
@@ -356,8 +360,6 @@ void driveForwards(){
   if (!goingHome){
 
     if (forwardMotion){
-      // Serial.print("Forward Motion: ");
-
       right_motor(1); // forwards
       left_motor(1); // forwards
 
@@ -371,7 +373,6 @@ void driveForwards(){
       }
     }
     else if (rotateLeft){
-      Serial.println("Rotate Left");
 
       right_motor(1); // forwards
       left_motor(-1); // backwards
@@ -385,8 +386,6 @@ void driveForwards(){
       }
     }
     else if (rotateRight){
-      Serial.println("Rotate Right");
-
       right_motor(-1); // forwards
       left_motor(1); // backwards
       if (!stop){
@@ -474,8 +473,6 @@ void foundLineBeeps(){
   if (!goingHome){
 
     if (forwardMotion){
-      Serial.print("Forward Motion: ");
-
       right_motor(1); // forwards
       left_motor(1); // forwards
 
@@ -489,7 +486,6 @@ void foundLineBeeps(){
       }
     }
     else if (rotateLeft){
-      Serial.println("Rotate Left");
 
       right_motor(1); // forwards
       left_motor(-1); // backwards
@@ -503,8 +499,6 @@ void foundLineBeeps(){
       }
     }
     else if (rotateRight){
-      Serial.println("Rotate Right");
-
       right_motor(-1); // forwards
       left_motor(1); // backwards
       if (!stop){
@@ -535,15 +529,13 @@ void stopIt(){
   state = 4;
 }
 
-float radiansToDegrees(float radian){
-  return radian * 57296 / 1000;
-}
 
 void setRotate(){
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
   // setLeftAngle(atan(y/x));
   setLeftAngle(27); //testing purposes
+  Serial.println("Angle is set");
   state = 5;
 }
 
@@ -590,7 +582,7 @@ void goHome(){
 
 void loop(){
   // output_signal <-----PID-- demand, measurement_l
-  Serial.println(state);
+  // Serial.println(state);
   switch(state) {
       case 0:
           initialisingBeeps();
@@ -612,12 +604,22 @@ void loop(){
           break;
       case 6:
           goHome();
-          Serial.println("Hello");
+          // Serial.println("Hello");
           break;
       default:
           Serial.println("System Error, Unknown state!");
           break;
   }
+
+
+  Serial.print(left_angle_goal);
+  Serial.print(",");
+  Serial.print(left_encoder);
+  Serial.print(" - ");
+
+  Serial.print(right_angle_goal);
+  Serial.print(",");
+  Serial.println(right_encoder);
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
