@@ -37,6 +37,8 @@ float right_goal = 0;
 float left_angle_goal = 0;
 float right_angle_goal = 0;
 
+float last_timestamp = 0;
+
 int totalWheelsDone = 0;
 
 int previous_right_encoder = 0;
