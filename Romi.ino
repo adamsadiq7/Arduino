@@ -415,7 +415,7 @@ void driveForwards(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.1;
+  float demand = 0.3;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
@@ -457,7 +457,7 @@ void driveForwards(){
   bangBang();
 
   if (foundLine){
-    state = 1;
+    state = 2;
   }
 
   if (!goingHome){
