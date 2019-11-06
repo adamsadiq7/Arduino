@@ -310,7 +310,20 @@ void foundLineBeeps(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.1;
+  // Get how much time has passed right now.
+    unsigned long time_now = millis();     
+
+  // Work out how many milliseconds have gone passed by subtracting
+  // our two timestamps.  time_now will always be bigger than the
+  // time_of_read (except when millis() overflows after 50 days).
+  unsigned long elapsed_time = time_now - last_timestamp;
+
+  if(elapsed_time > 20000){
+    float demand = 0.3;
+  }
+  else{
+    float demand = 0.1;
+  }
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
