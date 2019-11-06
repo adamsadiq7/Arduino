@@ -288,31 +288,28 @@ void bangBang(){
     forwardMotion = false;
   }
   else{
-    
-    
     if (state == 2){
       // Get how much time has passed right now.
-      unsigned long time_now = millis();     
+      unsigned long time_now = millis();
 
       // Work out how many milliseconds have gone passed by subtracting
       // our two timestamps.  time_now will always be bigger than the
       // time_of_read (except when millis() overflows after 50 days).
       unsigned long elapsed_time = time_now - last_timestamp_stop;
-    }
-    
-    if (elapsed_time > 500){
-      if (state == 2){
-        state = 3;
-        stop = true;
-        goingHome = true;
-      }
-    }
 
-    if (lastTurn == 1){
-      rotateLeft = true;
-    }
-    else if(lastTurn == 2){
-      rotateRight = true;
+      if (elapsed_time > 1000){
+        if (state == 2){
+          state = 3;
+          stop = true;
+          goingHome = true;
+        }
+      }
+      else if(lastTurn == 1){
+        rotateLeft = true;
+      }
+      else if(lastTurn == 2){
+        rotateRight = true;
+      }
     }
     else {
       //whitespace, just go forward until we got itt
