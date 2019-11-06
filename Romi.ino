@@ -542,6 +542,7 @@ void setRotate(){
 
 void rotate(){
   /* --- Checking for right wheel ---*/
+  Serial.print("being called");
   if (right_encoder < right_angle_goal){
     analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
   }
@@ -611,6 +612,8 @@ void loop(){
           break;
   }
 
+  Serial.println();
+  Serial.println();
 
   Serial.print(left_angle_goal);
   Serial.print(",");
@@ -620,6 +623,9 @@ void loop(){
   Serial.print(right_angle_goal);
   Serial.print(",");
   Serial.println(right_encoder);
+
+  Serial.println();
+  Serial.println();
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
