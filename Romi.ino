@@ -2,7 +2,7 @@
 #include "pid.h"
 #include "line_sensors.h"
 #include "kinematics.h"
-#include <math.h>
+#include <math.h> 
 
 // Note that there is no #define for E0_B:.
 // it's a non-standard pin, check out setupLeftEncoder().
@@ -29,7 +29,7 @@
 motor speeds for Left and Right.*/
 
 float l_speed;
-float r_speed;
+float r_speed; 
 
 float left_goal = 0;
 float right_goal = 0;
@@ -38,7 +38,7 @@ float left_angle_goal = 0;
 float right_angle_goal = 0;
 
 float last_timestamp = 0;
-
+ 
 int totalWheelsDone = 0;
 
 int previous_right_encoder = 0;
@@ -48,7 +48,6 @@ float delta_right = 0;
 float vel_update_t = 0;
 float elapsed_time = 0;
 int lastTurn = 0;
-float confidence = 0;
 
 bool movementStarted = false;
 
@@ -80,20 +79,19 @@ bool foundLine = false;
 bool stop = false;
 float theta = 0;
 
-PID right_pid(kp, ki, kd);
-PID left_pid(kp, ki, kd);
+PID right_pid( kp, ki, kd );
+PID left_pid( kp, ki, kd );
 
-LineSensor left_sensor(A2);
-LineSensor middle_sensor(A3);
-LineSensor right_sensor(A4);
+LineSensor left_sensor( A2 );
+LineSensor middle_sensor( A3 );
+LineSensor right_sensor( A4 );
 
-Kinematics position(0, 0, 0);
+Kinematics position(0,0,0);
 
 float threshold = -150;
 
 // Remember, setup only runs once.
-void setup()
-{
+void setup(){
   /* These two function set up the pin
   change interrupts for the encoders.
   If you want to know more, find them
@@ -108,7 +106,7 @@ void setup()
   pinMode(R_PWM_PIN, OUTPUT);
   pinMode(R_DIR_PIN, OUTPUT);
   // Set pin 6 (buzzer) to output.
-  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode( BUZZER_PIN, OUTPUT);
 
   // Set initial direction for l and r
   digitalWrite(L_DIR_PIN, HIGH);
@@ -140,32 +138,25 @@ void setup()
   Serial.println(" ***Reset*** ");
 }
 
-void left_motor(float l_speed)
-{
-  if (l_speed < 0)
-  {
+void left_motor(float l_speed){
+  if (l_speed < 0){
     digitalWrite(L_DIR_PIN, HIGH); // Backwards for me
   }
-  else
-  {
+  else{
     digitalWrite(L_DIR_PIN, LOW); // Forwards for me
   }
 }
 
-void right_motor(float l_speed)
-{
-  if (l_speed < 0)
-  {
+void right_motor(float l_speed){
+  if (l_speed < 0){
     digitalWrite(R_DIR_PIN, HIGH); // Backwards for me
   }
-  else
-  {
+  else{
     digitalWrite(R_DIR_PIN, LOW); // Forwards for me
   }
 }
 
-void driveForward(int mm)
-{
+void driveForward(int mm){
   // Setting goal for encoder/wheel to reach
   left_goal = (left_encoder) + mmToCode(mm);
   right_goal = (right_encoder) + mmToCode(mm);
@@ -179,8 +170,7 @@ void driveForward(int mm)
   right_motor(r_speed);
 }
 
-void turnRight(float angle)
-{
+void turnRight(float angle){
   // Setting goal for encoder/wheel to reach
   right_goal = (right_encoder) + angleToCode(angle);
 
@@ -191,8 +181,7 @@ void turnRight(float angle)
   right_motor(r_speed);
 }
 
-void turnLeft(float angle)
-{
+void turnLeft(float angle){
   // Setting goal for encoder/wheel to reach
   left_goal = (left_encoder) + angleToCode(angle);
 
@@ -203,8 +192,7 @@ void turnLeft(float angle)
   left_motor(l_speed);
 }
 
-void setLeftAngle(float angle)
-{
+void setLeftAngle(float angle){
   // Setting goal for encoder/wheel to reach
   left_angle_goal = left_encoder + angleToCode(angle);
   right_angle_goal = right_encoder - angleToCode(angle);
@@ -218,8 +206,7 @@ void setLeftAngle(float angle)
   right_motor(-r_speed);
 }
 
-void setRightAngle(float angle)
-{
+void setRightAngle(float angle){
   // Setting goal for encoder/wheel to reach
   right_angle_goal = right_encoder + angleToCode(angle);
   left_angle_goal = left_encoder - angleToCode(angle);
@@ -233,25 +220,21 @@ void setRightAngle(float angle)
   left_motor(-l_speed);
 }
 
-void commandFinished()
-{
-  if (command_index < sizeof(commands) - 1)
-  {
+void commandFinished(){
+  if (command_index < sizeof(commands) - 1){
     command_index++;
     currentCommand = commands[command_index];
   }
   executingCommand = false;
 }
 
-void calibrate()
-{
+void calibrate(){
   left_encoder = 0;
   right_encoder = 0;
   currentCommand = commands[0];
 }
 
-void printSensors()
-{
+void printSensors(){
   Serial.print(left_sensor.readCalibrated());
   Serial.print(", ");
   Serial.print(middle_sensor.readCalibrated());
@@ -259,50 +242,40 @@ void printSensors()
   Serial.println(right_sensor.readCalibrated());
 }
 
-void printRightSensor()
-{
+void printRightSensor(){
   Serial.println(right_sensor.readCalibrated());
 }
 
-void printMiddleSensor()
-{
+void printMiddleSensor(){
   Serial.println(middle_sensor.readCalibrated());
 }
 
-void printLeftSensor()
-{
+void printLeftSensor(){
   Serial.println(left_sensor.readCalibrated());
 }
 
-void bangBang()
-{
+void bangBang(){
   //you need to turn left or right until the middle sensor has found it
 
-  float r = right_sensor.readCalibrated();
-  float m = right_sensor.readCalibrated();
-  float l = right_sensor.readCalibrated();
-
   // we are on the black line
-  if (m < threshold){
-    confidence = 0;
+  if (middle_sensor.readCalibrated() < threshold){
     state = 2;
     forwardMotion = true;
 
     rotateLeft = false;
     rotateRight = false;
   }
-  else if (l < threshold){
-    confidence = 0;
+  else if (left_sensor.readCalibrated() < threshold){
     lastTurn = 1;
     state = 2;
     foundLine = true;
     rotateRight = true;
 
+
     rotateLeft = false;
     forwardMotion = false;
   }
-  else if (r < threshold){
-    confidence = 0;
+  else if (right_sensor.readCalibrated() < threshold){
     lastTurn = 2;
     state = 2;
     foundLine = true;
@@ -312,35 +285,29 @@ void bangBang()
     forwardMotion = false;
   }
   else{
-    confidence += 0.01;
-    if (confidence > 1000){
-      lastTurn = 0;
-    }
     if (lastTurn == 1){
       rotateLeft = true;
     }
-    else if (lastTurn == 2){
+    else if(lastTurn == 2){
       rotateRight = true;
     }
-    else{
+    else {
       if (state == 2){
         state = 3;
         stop = true;
         goingHome = true;
-      }
-      //whitespace, just go forward until we got itt
-      forwardMotion = true;
+      } 
+    //whitespace, just go forward until we got itt
+    forwardMotion = true;
     }
   }
 }
 
-float codeTomm(float code)
-{
+float codeTomm(float code){
   return code * 0.1849;
 }
 
-void rotate()
-{
+void rotate(){
   float x = position.getX();
   float y = position.getY();
   // setLeftAngle(atan(y/x));
@@ -348,8 +315,7 @@ void rotate()
   rotateLeft = true;
 }
 
-void foundLineBeeps()
-{
+void foundLineBeeps(){
   executingCommand = true; // do not trigger commands above (global space)
   forwardMotion = false;
   rotateLeft = false;
@@ -367,7 +333,7 @@ void foundLineBeeps()
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-  if (elapsed_time > 25000){
+  if(elapsed_time > 28000){
     demand = 0.07;
   }
   else{
@@ -382,33 +348,29 @@ void foundLineBeeps()
 
   float d_diff = codeTomm(d_left - d_right);
 
-  theta += (d_diff) / WHEEL_SEPERATION;
+  theta += (d_diff)/WHEEL_SEPERATION;
 
   position.update(d_right, theta);
 
   d_right = 0; //resetting gradient for right
-  d_left = 0;  //resetting gradient for left
+  d_left = 0; //resetting gradient for left
 
   //Once you think your error signal is correct
   //And your PID response is correct
   //Send output_r to motor
 
   //switch direction of motors
-  if (output_r > 0)
-  {
+  if (output_r > 0){
     right_motor(1); // forwards
   }
-  else if (output_r < 0)
-  {
+  else if(output_r < 0){
     right_motor(-1); //backwards
   }
 
-  if (output_l > 0)
-  {
+  if (output_l > 0){
     left_motor(1); // forwards
   }
-  else if (output_l < 0)
-  {
+  else if(output_l < 0){
     left_motor(-1); //backwards
   }
 
@@ -417,73 +379,61 @@ void foundLineBeeps()
 
   bangBang();
 
-  if (!goingHome)
-  {
+  if (!goingHome){
 
-    if (forwardMotion)
-    {
+    if (forwardMotion){
       Serial.print("Forward Motion: ");
 
       right_motor(1); // forwards
-      left_motor(1);  // forwards
+      left_motor(1); // forwards
 
-      if (!stop || goingHome)
-      {
+      if (!stop || goingHome){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else if (stop)
-      {
+      else if (stop){
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else if (rotateLeft)
-    {
+    else if (rotateLeft){
       Serial.println("Rotate Left");
 
       right_motor(1); // forwards
       left_motor(-1); // backwards
-      if (!stop)
-      {
+      if (!stop){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else
-      {
+      else{
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else if (rotateRight)
-    {
+    else if (rotateRight){
       Serial.println("Rotate Right");
 
       right_motor(-1); // forwards
-      left_motor(1);   // backwards
-      if (!stop)
-      {
+      left_motor(1); // backwards
+      if (!stop){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else
-      {
+      else{
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else
-    {
+    else{
       Serial.println("Tight one lad");
       // ngl i have no idea
       right_motor(-1); // backwards
-      left_motor(-1);  // backwards
+      left_motor(-1); // backwards
     }
   }
 }
 
-void driveForwards()
-{
+void driveForwards(){
   executingCommand = true; // do not trigger commands above (global space)
   forwardMotion = false;
   rotateLeft = false;
@@ -503,33 +453,29 @@ void driveForwards()
 
   float d_diff = codeTomm(d_left - d_right);
 
-  theta += (d_diff) / WHEEL_SEPERATION;
+  theta += (d_diff)/WHEEL_SEPERATION;
 
   position.update(d_right, theta);
 
   d_right = 0; //resetting gradient for right
-  d_left = 0;  //resetting gradient for left
+  d_left = 0; //resetting gradient for left
 
   //Once you think your error signal is correct
   //And your PID response is correct
   //Send output_r to motor
 
   //switch direction of motors
-  if (output_r > 0)
-  {
+  if (output_r > 0){
     right_motor(1); // forwards
   }
-  else if (output_r < 0)
-  {
+  else if(output_r < 0){
     right_motor(-1); //backwards
   }
 
-  if (output_l > 0)
-  {
+  if (output_l > 0){
     left_motor(1); // forwards
   }
-  else if (output_l < 0)
-  {
+  else if(output_l < 0){
     left_motor(-1); //backwards
   }
 
@@ -538,78 +484,66 @@ void driveForwards()
 
   bangBang();
 
-  if (foundLine)
-  {
+  if (foundLine){
     state = 2;
   }
 
-  if (!goingHome)
-  {
+  if (!goingHome){
 
-    if (forwardMotion)
-    {
+    if (forwardMotion){
       // Serial.print("Forward Motion: ");
 
       right_motor(1); // forwards
-      left_motor(1);  // forwards
+      left_motor(1); // forwards
 
-      if (!stop || goingHome)
-      {
+      if (!stop || goingHome){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else if (stop)
-      {
+      else if (stop){
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else if (rotateLeft)
-    {
+    else if (rotateLeft){
       Serial.println("Rotate Left");
 
       right_motor(1); // forwards
       left_motor(-1); // backwards
-      if (!stop)
-      {
+      if (!stop){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else
-      {
+      else{
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else if (rotateRight)
-    {
+    else if (rotateRight){
       Serial.println("Rotate Right");
 
       right_motor(-1); // forwards
-      left_motor(1);   // backwards
-      if (!stop)
-      {
+      left_motor(1); // backwards
+      if (!stop){
         analogWrite(R_PWM_PIN, output_r);
         analogWrite(L_PWM_PIN, output_l);
       }
-      else
-      {
+      else{
         analogWrite(R_PWM_PIN, 0);
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else
-    {
+    else{
       Serial.println("Tight one lad");
       // ngl i have no idea
       right_motor(-1); // backwards
-      left_motor(-1);  // backwards
+      left_motor(-1); // backwards
     }
   }
 }
 
 void initialisingBeeps(){
-  state = 1;
+   state = 1;
 }
 
 void stopIt(){
@@ -620,7 +554,7 @@ void stopIt(){
 }
 
 //void goHome(){
-//
+//  
 //  if (!rotated && !calledRotate){
 //    rotate();
 //    calledRotate = true;
@@ -797,58 +731,56 @@ void loop(){
   // output_signal <-----PID-- demand, measurement_l
   Serial.print("State");
   Serial.println(state);
-  switch (state)
-  {
-  case 0:
-    initialisingBeeps();
-    break;
-  case 1:
-    driveForwards();
-    break;
-  case 2:
-    foundLineBeeps();
-    break;
-  case 3:
-    stopIt();
-  case 4:
-    //          goHome();
-    Serial.println("Hello");
-  default:
-    Serial.println("System Error, Unknown state!");
-    break;
+  switch(state) {
+      case 0:
+          initialisingBeeps();
+          break;
+      case 1:
+          driveForwards();
+          break;
+      case 2:
+          foundLineBeeps();
+          break;
+      case 3:
+          stopIt();
+      case 4:
+//          goHome();
+          Serial.println("Hello");
+      default:
+          Serial.println("System Error, Unknown state!");
+          break;
   }
+
 
   /* ------ THIS IS FOR GOING HOME ------*/
 
   //Receive input to start moving
-  if (!executingCommand)
-  {
-    switch (currentCommand)
-    {
-    case 1: //driveForward
-      driveForward(100);
-      forwardMotion = true;
-      executingCommand = true;
-      break;
+  if (!executingCommand){
+    switch (currentCommand){
+      case 1: //driveForward
+        driveForward(100);
+        forwardMotion = true;
+        executingCommand = true;
+        break;
 
-    case 2: //turnRight
-      setRightAngle(90);
-      rotateRight = true;
-      executingCommand = true;
-      break;
+      case 2: //turnRight
+        setRightAngle(90);
+        rotateRight = true;
+        executingCommand = true;
+        break;
 
-    case 3: //turnLeft
-      setLeftAngle(90);
-      rotateLeft = true;
-      executingCommand = true;
-      break;
+      case 3: //turnLeft
+        setLeftAngle(90);
+        rotateLeft = true;
+        executingCommand = true;
+        break;
 
-    case 4: //reverse
-      driveForward(100);
-      backwardMotion = true;
-      executingCommand = true;
-      break;
-    }
+      case 4: //reverse
+        driveForward(100);
+        backwardMotion = true;
+        executingCommand = true;
+        break;
+      }
   }
 
   delay(2);
