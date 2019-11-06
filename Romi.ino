@@ -729,28 +729,33 @@ void stopIt(){
 //}
 
 void loop(){
-  // output_signal <-----PID-- demand, measurement_l
-  Serial.print("State");
-  Serial.println(state);
-  switch(state) {
-      case 0:
-          initialisingBeeps();
-          break;
-      case 1:
-          driveForwards();
-          break;
-      case 2:
-          foundLineBeeps();
-          break;
-      case 3:
-          stopIt();
-      case 4:
-//          goHome();
-          Serial.println("Hello");
-      default:
-          Serial.println("System Error, Unknown state!");
-          break;
-  }
+
+
+  analogWrite(R_PWM_PIN, 255);
+  analogWrite(L_PWM_PIN, 255);
+
+//   // output_signal <-----PID-- demand, measurement_l
+//   Serial.print("State");
+//   Serial.println(state);
+//   switch(state) {
+//       case 0:
+//           initialisingBeeps();
+//           break;
+//       case 1:
+//           driveForwards();
+//           break;
+//       case 2:
+//           foundLineBeeps();
+//           break;
+//       case 3:
+//           stopIt();
+//       case 4:
+// //          goHome();
+//           Serial.println("Hello");
+//       default:
+//           Serial.println("System Error, Unknown state!");
+//           break;
+//   }
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
