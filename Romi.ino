@@ -38,6 +38,7 @@ float left_angle_goal = 0;
 float right_angle_goal = 0;
 
 float last_timestamp = 0;
+float last_timestamp_stop = 0;
  
 int totalWheelsDone = 0;
 
@@ -285,6 +286,17 @@ void bangBang(){
     forwardMotion = false;
   }
   else{
+    // Get how much time has passed right now.
+    unsigned long time_now = millis();     
+
+    // Work out how many milliseconds have gone passed by subtracting
+    // our two timestamps.  time_now will always be bigger than the
+    // time_of_read (except when millis() overflows after 50 days).
+    unsigned long elapsed_time = time_now - last_timestamp_stop;
+
+    if (elapsed_time > 500) {
+      lastTurn = 0;
+    }
     if (lastTurn == 1){
       rotateLeft = true;
     }
@@ -296,7 +308,7 @@ void bangBang(){
         state = 3;
         stop = true;
         goingHome = true;
-      } 
+      }
     //whitespace, just go forward until we got itt
     forwardMotion = true;
     }
