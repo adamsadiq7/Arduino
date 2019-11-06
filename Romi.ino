@@ -265,6 +265,7 @@ void bangBang(){
     rotateRight = false;
   }
   else if (left_sensor.readCalibrated() < threshold){
+    state = 2;
     foundLine = true;
     rotateRight = true;
 
@@ -273,6 +274,7 @@ void bangBang(){
     forwardMotion = false;
   }
   else if (right_sensor.readCalibrated() < threshold){
+    state = 2;
     foundLine = true;
     rotateLeft = true;
 
@@ -281,7 +283,7 @@ void bangBang(){
   }
   else{
     if (state == 2){
-      state == 3;
+      state = 3;
       stop = true;
       goingHome = true;
     }
@@ -369,7 +371,7 @@ void foundLineBeeps(){
   if (!goingHome){
 
     if (forwardMotion){
-      // Serial.print("Forward Motion: ");
+      Serial.print("Forward Motion: ");
 
       right_motor(1); // forwards
       left_motor(1); // forwards
@@ -530,7 +532,7 @@ void driveForwards(){
 }
 
 void initialisingBeeps(){
-   state =1;
+   state = 1;
 }
 
 void stopIt(){
