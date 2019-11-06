@@ -543,7 +543,7 @@ void setRotate(){
 void rotate(){
   /* --- Checking for right wheel ---*/
   if (right_encoder < right_angle_goal){
-    analogWrite(R_PWM_PIN, abs(r_speed));
+    analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
   }
   else{
     //stop wheel
@@ -559,7 +559,7 @@ void rotate(){
 
   /* --- Checking for left wheel ---*/
   if (left_encoder > left_angle_goal){
-    analogWrite(L_PWM_PIN, abs(l_speed));
+    analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
   }
   else{
     //stop wheel
