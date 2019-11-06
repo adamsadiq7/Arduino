@@ -113,8 +113,8 @@ void setup(){
   digitalWrite(R_DIR_PIN, HIGH);
 
   // Set initial l_speed and r_speed values.
-  // l_speed = 0;
-  // r_speed = 0;
+  l_speed = 0;
+  r_speed = 0;
 
   left_last_timestamp = micros();
   right_last_timestamp = micros();
@@ -333,12 +333,11 @@ void foundLineBeeps(){
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-
-  if(elapsed_time > 28000){
+  if(elapsed_time > 25000){
     demand = 0.07;
   }
   else{
-    demand = 0.07;
+    demand = 0.2;
   }
 
   measurement_l = left_velocity;
@@ -389,8 +388,8 @@ void foundLineBeeps(){
       left_motor(1); // forwards
 
       if (!stop || goingHome){
-        analogWrite(R_PWM_PIN, 255);
-        analogWrite(L_PWM_PIN, 255);
+        analogWrite(R_PWM_PIN, output_r);
+        analogWrite(L_PWM_PIN, output_l);
       }
       else if (stop){
         analogWrite(R_PWM_PIN, 0);
@@ -403,8 +402,8 @@ void foundLineBeeps(){
       right_motor(1); // forwards
       left_motor(-1); // backwards
       if (!stop){
-        analogWrite(R_PWM_PIN, 255);
-        analogWrite(L_PWM_PIN, 255);
+        analogWrite(R_PWM_PIN, output_r);
+        analogWrite(L_PWM_PIN, output_l);
       }
       else{
         analogWrite(R_PWM_PIN, 0);
@@ -417,8 +416,8 @@ void foundLineBeeps(){
       right_motor(-1); // forwards
       left_motor(1); // backwards
       if (!stop){
-        analogWrite(R_PWM_PIN, 255);
-        analogWrite(L_PWM_PIN, 255);
+        analogWrite(R_PWM_PIN, output_r);
+        analogWrite(L_PWM_PIN, output_l);
       }
       else{
         analogWrite(R_PWM_PIN, 0);
@@ -444,7 +443,7 @@ void driveForwards(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 1;
+  float demand = 0.3;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
@@ -729,67 +728,60 @@ void stopIt(){
 //}
 
 void loop(){
-
-
-  analogWrite(R_PWM_PIN, 255);
-  analogWrite(L_PWM_PIN, 255);
-
-}
-
-//   // output_signal <-----PID-- demand, measurement_l
-//   Serial.print("State");
-//   Serial.println(state);
-//   switch(state) {
-//       case 0:
-//           initialisingBeeps();
-//           break;
-//       case 1:
-//           driveForwards();
-//           break;
-//       case 2:
-//           foundLineBeeps();
-//           break;
-//       case 3:
-//           stopIt();
-//       case 4:
-// //          goHome();
-//           Serial.println("Hello");
-//       default:
-//           Serial.println("System Error, Unknown state!");
-//           break;
-//   }
+  // output_signal <-----PID-- demand, measurement_l
+  Serial.print("State");
+  Serial.println(state);
+  switch(state) {
+      case 0:
+          initialisingBeeps();
+          break;
+      case 1:
+          driveForwards();
+          break;
+      case 2:
+          foundLineBeeps();
+          break;
+      case 3:
+          stopIt();
+      case 4:
+//          goHome();
+          Serial.println("Hello");
+      default:
+          Serial.println("System Error, Unknown state!");
+          break;
+  }
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
 
-  // //Receive input to start moving
-  // if (!executingCommand){
-  //   switch (currentCommand){
-  //     case 1: //driveForward
-  //       driveForward(100);
-  //       forwardMotion = true;
-  //       executingCommand = true;
-  //       break;
+  //Receive input to start moving
+  if (!executingCommand){
+    switch (currentCommand){
+      case 1: //driveForward
+        driveForward(100);
+        forwardMotion = true;
+        executingCommand = true;
+        break;
 
-  //     case 2: //turnRight
-  //       setRightAngle(90);
-  //       rotateRight = true;
-  //       executingCommand = true;
-  //       break;
+      case 2: //turnRight
+        setRightAngle(90);
+        rotateRight = true;
+        executingCommand = true;
+        break;
 
-  //     case 3: //turnLeft
-  //       setLeftAngle(90);
-  //       rotateLeft = true;
-  //       executingCommand = true;
-  //       break;
+      case 3: //turnLeft
+        setLeftAngle(90);
+        rotateLeft = true;
+        executingCommand = true;
+        break;
 
-  //     case 4: //reverse
-  //       driveForward(100);
-  //       backwardMotion = true;
-  //       executingCommand = true;
-  //       break;
-  //     }
-  // }
+      case 4: //reverse
+        driveForward(100);
+        backwardMotion = true;
+        executingCommand = true;
+        break;
+      }
+  }
 
-  // delay(2);
-// }
+  delay(2);
+}
