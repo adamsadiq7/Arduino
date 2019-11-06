@@ -565,11 +565,10 @@ void stopIt(){
   analogWrite(R_PWM_PIN, 0);
   analogWrite(L_PWM_PIN, 0);
 
-  analogWrite(6, 255);
+  analogWrite(6, 15);
   delay(2000); // buzz for 2 seconds
   analogWrite(6, 0);
   state = 4;
-
 }
 
 //void goHome(){
@@ -765,6 +764,7 @@ void loop(){
       case 4:
 //          goHome();
           Serial.println("Hello");
+          break;
       default:
           Serial.println("System Error, Unknown state!");
           break;
