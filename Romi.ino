@@ -113,8 +113,8 @@ void setup(){
   digitalWrite(R_DIR_PIN, HIGH);
 
   // Set initial l_speed and r_speed values.
-  l_speed = 0;
-  r_speed = 0;
+  // l_speed = 0;
+  // r_speed = 0;
 
   left_last_timestamp = micros();
   right_last_timestamp = micros();
@@ -734,6 +734,8 @@ void loop(){
   analogWrite(R_PWM_PIN, 255);
   analogWrite(L_PWM_PIN, 255);
 
+}
+
 //   // output_signal <-----PID-- demand, measurement_l
 //   Serial.print("State");
 //   Serial.println(state);
@@ -760,34 +762,34 @@ void loop(){
 
   /* ------ THIS IS FOR GOING HOME ------*/
 
-  //Receive input to start moving
-  if (!executingCommand){
-    switch (currentCommand){
-      case 1: //driveForward
-        driveForward(100);
-        forwardMotion = true;
-        executingCommand = true;
-        break;
+  // //Receive input to start moving
+  // if (!executingCommand){
+  //   switch (currentCommand){
+  //     case 1: //driveForward
+  //       driveForward(100);
+  //       forwardMotion = true;
+  //       executingCommand = true;
+  //       break;
 
-      case 2: //turnRight
-        setRightAngle(90);
-        rotateRight = true;
-        executingCommand = true;
-        break;
+  //     case 2: //turnRight
+  //       setRightAngle(90);
+  //       rotateRight = true;
+  //       executingCommand = true;
+  //       break;
 
-      case 3: //turnLeft
-        setLeftAngle(90);
-        rotateLeft = true;
-        executingCommand = true;
-        break;
+  //     case 3: //turnLeft
+  //       setLeftAngle(90);
+  //       rotateLeft = true;
+  //       executingCommand = true;
+  //       break;
 
-      case 4: //reverse
-        driveForward(100);
-        backwardMotion = true;
-        executingCommand = true;
-        break;
-      }
-  }
+  //     case 4: //reverse
+  //       driveForward(100);
+  //       backwardMotion = true;
+  //       executingCommand = true;
+  //       break;
+  //     }
+  // }
 
-  delay(2);
-}
+  // delay(2);
+// }
