@@ -278,7 +278,7 @@ void bangBang(){
     forwardMotion = false;
   }
   else if (right_sensor.readCalibrated() < threshold){
-    lastTurn = 2
+    lastTurn = 2;
     last_timestamp_stop = millis();
     state = 2;
     foundLine = true;
