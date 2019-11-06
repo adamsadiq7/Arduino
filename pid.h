@@ -72,8 +72,7 @@ class PID {
  * Class constructor
  * This runs whenever we create an instance of the class
  */
- PID::PID(float P, float I, float D)
-{
+ PID::PID(float P, float I, float D){
   //Store the gains
   setGains(P, I, D);
   
