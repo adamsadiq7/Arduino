@@ -48,6 +48,7 @@ float delta_right = 0;
 float vel_update_t = 0;
 float elapsed_time = 0;
 int lastTurn = 0;
+float confidence = 0;
 
 bool movementStarted = false;
 
@@ -259,6 +260,7 @@ void bangBang(){
 
   // we are on the black line
   if (middle_sensor.readCalibrated() < threshold){
+    confidence = 0;
     state = 2;
     forwardMotion = true;
 
@@ -266,16 +268,17 @@ void bangBang(){
     rotateRight = false;
   }
   else if (left_sensor.readCalibrated() < threshold){
+    confidence = 0;
     lastTurn = 1;
     state = 2;
     foundLine = true;
     rotateRight = true;
 
-
     rotateLeft = false;
     forwardMotion = false;
   }
   else if (right_sensor.readCalibrated() < threshold){
+    confidence = 0;
     lastTurn = 2;
     state = 2;
     foundLine = true;
@@ -285,6 +288,12 @@ void bangBang(){
     forwardMotion = false;
   }
   else{
+    confidence += 0.01;
+
+    if (confidence > 100){
+      lastTurn = 0;
+    }
+
     if (lastTurn == 1){
       rotateLeft = true;
     }
