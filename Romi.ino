@@ -348,7 +348,7 @@ void foundLineBeeps(){
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-  if(elapsed_time > 25000){
+  if(elapsed_time > 28000){
     demand = 0.07;
   }
   else{
@@ -564,8 +564,12 @@ void initialisingBeeps(){
 void stopIt(){
   analogWrite(R_PWM_PIN, 0);
   analogWrite(L_PWM_PIN, 0);
-  delay(3000); //stop for three seconds
+
+  analogWrite(6, 255);
+  delay(2000); // buzz for 2 seconds
+  analogWrite(6, 0);
   state = 4;
+
 }
 
 //void goHome(){
