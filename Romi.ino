@@ -577,13 +577,13 @@ void rotate(){
 }
 
 
-void goHome(){
+// void goHome(){
 
-}
+// }
 
 void loop(){
-  // output_signal <-----PID-- demand, measurement_l
-  // Serial.println(state);
+  Serial.print("state: ");
+  Serial.println(state);
   switch(state) {
       case 0:
           initialisingBeeps();
@@ -604,7 +604,7 @@ void loop(){
           rotate();
           break;
       case 6:
-          goHome();
+          // goHome();
           // Serial.println("Hello");
           break;
       default:
