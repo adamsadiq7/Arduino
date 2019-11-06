@@ -389,8 +389,8 @@ void foundLineBeeps(){
       left_motor(1); // forwards
 
       if (!stop || goingHome){
-        analogWrite(R_PWM_PIN, output_r);
-        analogWrite(L_PWM_PIN, output_l);
+        analogWrite(R_PWM_PIN, 255);
+        analogWrite(L_PWM_PIN, 255);
       }
       else if (stop){
         analogWrite(R_PWM_PIN, 0);
@@ -403,8 +403,8 @@ void foundLineBeeps(){
       right_motor(1); // forwards
       left_motor(-1); // backwards
       if (!stop){
-        analogWrite(R_PWM_PIN, output_r);
-        analogWrite(L_PWM_PIN, output_l);
+        analogWrite(R_PWM_PIN, 255);
+        analogWrite(L_PWM_PIN, 255);
       }
       else{
         analogWrite(R_PWM_PIN, 0);
@@ -417,8 +417,8 @@ void foundLineBeeps(){
       right_motor(-1); // forwards
       left_motor(1); // backwards
       if (!stop){
-        analogWrite(R_PWM_PIN, output_r);
-        analogWrite(L_PWM_PIN, output_l);
+        analogWrite(R_PWM_PIN, 255);
+        analogWrite(L_PWM_PIN, 255);
       }
       else{
         analogWrite(R_PWM_PIN, 0);
