@@ -310,7 +310,7 @@ void foundLineBeeps(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.07;
+  float demand = 0.1;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
@@ -415,7 +415,7 @@ void driveForwards(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.4;
+  float demand = 0.5;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
