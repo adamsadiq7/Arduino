@@ -38,7 +38,7 @@ float left_angle_goal = 0;
 float right_angle_goal = 0;
 
 float last_timestamp = 0;
-
+ 
 int totalWheelsDone = 0;
 
 int previous_right_encoder = 0;
@@ -319,12 +319,12 @@ void foundLineBeeps(){
   // our two timestamps.  time_now will always be bigger than the
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
-
+  float demand;
   if(elapsed_time > 30000){
-    float demand = 0.07;
+    demand = 0.07;
   }
   else{
-    float demand = 0.4;
+    demand = 0.4;
   }
 
   measurement_l = left_velocity;
