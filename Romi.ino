@@ -319,10 +319,10 @@ void foundLineBeeps(){
   unsigned long elapsed_time = time_now - last_timestamp;
 
   if(elapsed_time > 30000){
-    float demand = 0.4;
+    float demand = 0.07;
   }
   else{
-    float demand = 0.07;
+    float demand = 0.4;
   }
 
   measurement_l = left_velocity;
