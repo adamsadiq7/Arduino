@@ -324,7 +324,7 @@ void foundLineBeeps(){
     demand = 0.07;
   }
   else{
-    demand = 0.3;
+    demand = 0.2;
   }
 
   measurement_l = left_velocity;
