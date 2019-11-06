@@ -520,6 +520,7 @@ void foundLineBeeps(){
 }
 
 void stopIt(){
+  state = 4;
   analogWrite(R_PWM_PIN, 0);
   analogWrite(L_PWM_PIN, 0);
 
@@ -582,8 +583,8 @@ void rotate(){
 // }
 
 void loop(){
-  Serial.print("state: ");
-  Serial.println(state);
+  // Serial.print("state: ");
+  // Serial.println(state);
   switch(state) {
       case 0:
           initialisingBeeps();
@@ -612,20 +613,20 @@ void loop(){
           break;
   }
 
-  Serial.println();
-  Serial.println();
+  // Serial.println();
+  // Serial.println();
 
-  Serial.print(left_angle_goal);
-  Serial.print(",");
-  Serial.print(left_encoder);
-  Serial.print(" - ");
+  // Serial.print(left_angle_goal);
+  // Serial.print(",");
+  // Serial.print(left_encoder);
+  // Serial.print(" - ");
 
-  Serial.print(right_angle_goal);
-  Serial.print(",");
-  Serial.println(right_encoder);
+  // Serial.print(right_angle_goal);
+  // Serial.print(",");
+  // Serial.println(right_encoder);
 
-  Serial.println();
-  Serial.println();
+  // Serial.println();
+  // Serial.println();
 
 
   /* ------ THIS IS FOR GOING HOME ------*/
