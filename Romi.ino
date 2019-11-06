@@ -320,11 +320,11 @@ void foundLineBeeps(){
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-  if(elapsed_time > 30000){
+  if(elapsed_time > 20000){
     demand = 0.07;
   }
   else{
-    demand = 0.4;
+    demand = 0.3;
   }
 
   measurement_l = left_velocity;
@@ -430,7 +430,7 @@ void driveForwards(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  float demand = 0.4;
+  float demand = 0.3;
 
   measurement_l = left_velocity;
   measurement_r = right_velocity;
