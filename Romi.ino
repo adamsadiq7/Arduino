@@ -34,6 +34,8 @@ float r_speed;
 float left_goal = 0;
 float right_goal = 0;
 
+float goal = 0;
+bool wrongSide = false;
 
 float last_left = left_encoder;
 float last_right = right_encoder;
@@ -525,12 +527,47 @@ void setRotate(){
   updatePosition();
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
-  setLeftAngle(atan(y/x));
+  goal = atan(y/x);
   // setLeftAngle(180); //testing purposes
   Serial.println("Angle is set");
   state = 5;
 }
 
+
+void rotateUntil(){
+  updatePosition();
+  if (theta > goal && !wrongSide){
+    wrongSide = true;
+  }
+
+  if (wrongSide){
+    if (theta > goal){
+      left_motor(1)
+      right_motor(-1);
+      analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
+      analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
+    }
+    else{
+      state = 6;
+    }
+  }
+  else{
+    if (theta < goal){
+      left_motor(-1)
+      right_motor(1);
+      analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
+      analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
+    }
+    else{
+      state = 7;
+    }
+    // rotate Right code
+  }
+  if (theta > goal){
+
+  }
+  
+}
 
 void rotate(){
   /* --- Checking for right wheel ---*/
@@ -605,7 +642,7 @@ void loop(){
           setRotate();
           break;
       case 5:
-          rotate();
+          rotateUntil();
           break;
       case 6:
           goHome();
