@@ -45,8 +45,8 @@ void Kinematics::update(float distance, float theta_){
   x += distance * cos(theta_);
 
   Serial.println(theta_);
-  
-  Serial.println(x);
+
+  Serial.print(x);
   Serial.print(",");
   Serial.println(y);
 }
