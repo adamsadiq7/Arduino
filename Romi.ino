@@ -528,7 +528,6 @@ void setRotate(){
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
   goal = atan(y/x);
-  // setLeftAngle(180); //testing purposes
   Serial.println("Angle is set");
   state = 5;
 }
@@ -536,13 +535,21 @@ void setRotate(){
 
 void rotateUntil(){
   updatePosition();
+
+  
+  Serial.print(" ----- "); 
+  Serial.print(theta);
+  Serial.print(",");
+  Serial.print(goal);
+  Serial.print(" ----- "); 
+
   if (theta > goal && !wrongSide){
     wrongSide = true;
   }
 
   if (wrongSide){
-    if (theta < goal){
-      left_motor(1)
+    if (theta > goal){
+      left_motor(1);
       right_motor(-1);
       analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
       analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
@@ -552,8 +559,8 @@ void rotateUntil(){
     }
   }
   else{
-    if (theta > goal){
-      left_motor(-1)
+    if (theta < goal){
+      left_motor(-1);
       right_motor(1);
       analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
       analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
@@ -561,12 +568,7 @@ void rotateUntil(){
     else{
       state = 6;
     }
-    // rotate Right code
   }
-  if (theta > goal){
-
-  }
-  
 }
 
 void rotate(){
