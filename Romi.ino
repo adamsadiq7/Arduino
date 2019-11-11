@@ -435,8 +435,9 @@ void foundLineBeeps(){
   float d_diff = codeTomm(d_left - d_right);
 
   theta += (d_diff)/WHEEL_SEPERATION;
+  float avgDistance = (d_left + d_right)/2;
 
-  position.update(d_right, theta);
+  position.update(avgDistance, theta);
 
   d_right = 0; //resetting gradient for right
   d_left = 0; //resetting gradient for left
@@ -573,11 +574,12 @@ void rotate(){
 
 
 void goHome(){ 
-   float d_diff = codeTomm(d_left - d_right);
+  float d_diff = codeTomm(d_left - d_right);
 
   theta += (d_diff)/WHEEL_SEPERATION;
+  float avgDistance = (d_left + d_right)/2;
 
-  position.update(d_right, theta);
+  position.update(avgDistance, theta);
 
   d_right = 0; //resetting gradient for right
   d_left = 0; //resetting gradient for left
