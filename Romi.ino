@@ -299,6 +299,7 @@ float radiansToDegrees(float radian){
 }
 
 void initialisingBeeps(){
+   updatePosition();
    state = 1;
 }
 
@@ -320,15 +321,7 @@ void driveForwards(){
   float output_l = left_pid.update(demand, measurement_l);
   float output_r = right_pid.update(demand, measurement_r);
 
-  float d_diff = codeTomm(d_left - d_right);
-
-  theta += (d_diff)/WHEEL_SEPERATION;
-  float avgDistance = (d_left + d_right)/2;
-
-  position.update(avgDistance, theta);
-
-  d_right = 0; //resetting gradient for right
-  d_left = 0; //resetting gradient for left
+  updatePosition();
 
   //Once you think your error signal is correct
   //And your PID response is correct
@@ -431,16 +424,8 @@ void foundLineBeeps(){
 
   float output_l = left_pid.update(demand, measurement_l);
   float output_r = right_pid.update(demand, measurement_r);
-
-  float d_diff = codeTomm(d_left - d_right);
-
-  theta += (d_diff)/WHEEL_SEPERATION;
-  float avgDistance = (d_left + d_right)/2;
-
-  position.update(avgDistance, theta);
-
-  d_right = 0; //resetting gradient for right
-  d_left = 0; //resetting gradient for left
+  
+  updatePosition();
 
   //Once you think your error signal is correct
   //And your PID response is correct
@@ -506,16 +491,11 @@ void foundLineBeeps(){
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else{
-      Serial.println("Tight one lad");
-      // ngl i have no idea
-      right_motor(-1); // backwards
-      left_motor(-1); // backwards
-    }
   }
 }
 
 void stopIt(){
+  updatePosition();
   state = 4;
   analogWrite(R_PWM_PIN, 0);
   analogWrite(L_PWM_PIN, 0);
@@ -528,6 +508,7 @@ void stopIt(){
 
 
 void setRotate(){
+  updatePosition();
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
   // setLeftAngle(atan(y/x));
@@ -572,8 +553,7 @@ void rotate(){
   }
 }
 
-
-void goHome(){ 
+void updatePosition(){
   float d_diff = codeTomm(d_left - d_right);
 
   theta += (d_diff)/WHEEL_SEPERATION;
@@ -583,6 +563,10 @@ void goHome(){
 
   d_right = 0; //resetting gradient for right
   d_left = 0; //resetting gradient for left
+}
+
+void goHome(){ 
+  updatePosition();
 }
 
 void loop(){
