@@ -568,17 +568,19 @@ void rotate(){
 }
 
 void updatePosition(){
-  float diff_l = codeTomm(left_encoder - last_left);
-  float diff_r = codeTomm(right_encoder - last_right);
+  float left_enc = left_encoder;
+  float right_enc = right_encoder;
+  float diff_l = codeTomm(left_enc - last_left);
+  float diff_r = codeTomm(right_enc - last_right);
 
-  theta += (diff_l - diff_r)/(2*WHEEL_SEPERATION);
+  theta += ((diff_l) - diff_r)/(2*WHEEL_SEPERATION);
   
   float avgDistance = (diff_l + diff_r)/2;
 
   position.update(avgDistance, theta);
 
-  last_left = left_encoder;
-  last_right = right_encoder;
+  last_left = left_enc;
+  last_right = right_enc;
 }
 
 void goHome(){ 
