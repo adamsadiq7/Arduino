@@ -416,7 +416,7 @@ void foundLineBeeps(){
   // time_of_read (except when millis() overflows after 50 days).
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-  if(elapsed_time > 28000){
+  if(elapsed_time > 30000){
     demand = 0.07;
   }
   else{
@@ -515,8 +515,8 @@ void setRotate(){
   updatePosition();
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
-  // setLeftAngle(atan(y/x));
-  setLeftAngle(180); //testing purposes
+  setLeftAngle(atan(y/x));
+  // setLeftAngle(180); //testing purposes
   Serial.println("Angle is set");
   state = 5;
 }
