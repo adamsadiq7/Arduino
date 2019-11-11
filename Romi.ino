@@ -556,7 +556,7 @@ void rotate(){
 void updatePosition(){
   float d_diff = codeTomm(left_encoder - right_encoder);
 
-  theta += (d_diff)/WHEEL_SEPERATION;
+  theta += (d_diff)/(2*WHEEL_SEPERATION);
   float avgDistance = (d_left + d_right)/2;
 
   position.update(avgDistance, theta);
