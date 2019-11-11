@@ -515,8 +515,8 @@ void setRotate(){
   updatePosition();
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
-  // setLeftAngle(atan(y/x));
-  setLeftAngle(180); //testing purposes
+  setLeftAngle(atan(y/x));
+  // setLeftAngle(180); //testing purposes
   Serial.println("Angle is set");
   state = 5;
 }

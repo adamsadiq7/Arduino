@@ -30,7 +30,7 @@ class Kinematics{
     //Private variables and methods go here
     float x; 
     float y; 
-    float theta;
+    float theta = M_PI/2;
     float last_p;
 };
 
@@ -44,9 +44,9 @@ void Kinematics::update(float distance, float theta_){
   y += distance * sin(theta_);
   x += distance * cos(theta_);
 
-  Serial.print(x);
-  Serial.print(",");
-  Serial.println(y);
+  Serial.print(theta_);
+  // Serial.print(",");
+  // Serial.println(y);
 }
 
 void Kinematics::setConstructor(float x_input, float y_input, float theta_input){
