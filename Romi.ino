@@ -43,6 +43,8 @@ float right_angle_goal = 0;
 
 float last_timestamp = 0;
 float last_timestamp_stop = 0;
+float last_timestamp_buzz = 0;
+float startedbuzz = 0;
  
 int totalWheelsDone = 0;
 
@@ -500,14 +502,22 @@ void foundLineBeeps(){
 
 void stopIt(){
   updatePosition();
-  state = 4;
+  if (!startedbuzz){
+    last_timestamp_buzz = millis();
+    startedbuzz = true;
+  }
+
   analogWrite(R_PWM_PIN, 0);
   analogWrite(L_PWM_PIN, 0);
 
   analogWrite(6, 15);
-  delay(2000); // buzz for 2 seconds
-  analogWrite(6, 0);
-  state = 4;
+
+  float time_now = millis();
+  float elapsed_time = time_now - last_timestamp_buzz;
+  if (elapsed_time > 2000){ //after 2 seconds
+    analogWrite(6, 0);
+    state = 4;
+  }
 }
 
 
