@@ -34,6 +34,10 @@ float r_speed;
 float left_goal = 0;
 float right_goal = 0;
 
+
+float last_left = left_encoder;
+float last_right = right_encoder;
+
 float left_angle_goal = 0;
 float right_angle_goal = 0;
 
@@ -291,7 +295,7 @@ void bangBang(){
 }
 
 float codeTomm(float code){
-  return code * 0.1849;
+  return code * 0.15;
 }
 
 float radiansToDegrees(float radian){
@@ -554,15 +558,17 @@ void rotate(){
 }
 
 void updatePosition(){
-  float d_diff = codeTomm(left_encoder - right_encoder);
+  float d_diff_l = codeTomm(left_encoder - last_left);
+  float d_diff_r = codeTomm(right_encoder - last_right);
 
-  theta += (d_diff)/(2*WHEEL_SEPERATION);
+  theta += (d_diff_l - d_diff_r)/(2*WHEEL_SEPERATION);
+  
   float avgDistance = (d_left + d_right)/2;
 
   position.update(avgDistance, theta);
 
-  d_right = 0; //resetting gradient for right
-  d_left = 0; //resetting gradient for left
+  last_left = left_encoder;
+  last_right = right_encoder;
 }
 
 void goHome(){ 
