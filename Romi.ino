@@ -541,7 +541,7 @@ void rotateUntil(){
   }
 
   if (wrongSide){
-    if (theta > goal){
+    if (theta < goal){
       left_motor(1)
       right_motor(-1);
       analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
@@ -552,14 +552,14 @@ void rotateUntil(){
     }
   }
   else{
-    if (theta < goal){
+    if (theta > goal){
       left_motor(-1)
       right_motor(1);
       analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
       analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
     }
     else{
-      state = 7;
+      state = 6;
     }
     // rotate Right code
   }
