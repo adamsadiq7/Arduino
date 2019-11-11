@@ -537,11 +537,11 @@ void rotateUntil(){
   updatePosition();
 
   
-  Serial.print(" ----- "); 
+  Serial.println(" ----- "); 
   Serial.print(theta);
   Serial.print(",");
   Serial.print(goal);
-  Serial.print(" ----- "); 
+  Serial.println(" ----- "); 
 
   if (theta > goal && !wrongSide){
     wrongSide = true;
