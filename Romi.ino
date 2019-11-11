@@ -305,8 +305,8 @@ float radiansToDegrees(float radian){
 }
 
 void initialisingBeeps(){
-   updatePosition();
-   state = 1;
+  updatePosition();
+  state = 1;
 }
 
 void driveForwards(){
