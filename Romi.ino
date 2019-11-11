@@ -323,8 +323,9 @@ void driveForwards(){
   float d_diff = codeTomm(d_left - d_right);
 
   theta += (d_diff)/WHEEL_SEPERATION;
+  float avgDistance = (d_left + d_right)/2;
 
-  position.update(d_right, theta);
+  position.update(avgDistance, theta);
 
   d_right = 0; //resetting gradient for right
   d_left = 0; //resetting gradient for left
@@ -543,7 +544,6 @@ void setRotate(){
 
 void rotate(){
   /* --- Checking for right wheel ---*/
-  Serial.print("being called");
   if (right_encoder > right_angle_goal){
     analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
   }
@@ -583,8 +583,6 @@ void rotate(){
 // }
 
 void loop(){
-  // Serial.print("state: ");
-  // Serial.println(state);
   switch(state) {
       case 0:
           initialisingBeeps();
@@ -606,28 +604,11 @@ void loop(){
           break;
       case 6:
           // goHome();
-          // Serial.println("Hello");
           break;
       default:
           Serial.println("System Error, Unknown state!");
           break;
   }
-
-  // Serial.println();
-  // Serial.println();
-
-  // Serial.print(left_angle_goal);
-  // Serial.print(",");
-  // Serial.print(left_encoder);
-  // Serial.print(" - ");
-
-  // Serial.print(right_angle_goal);
-  // Serial.print(",");
-  // Serial.println(right_encoder);
-
-  // Serial.println();
-  // Serial.println();
-
 
   /* ------ THIS IS FOR GOING HOME ------*/
 
