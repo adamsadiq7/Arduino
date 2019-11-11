@@ -78,7 +78,7 @@ bool rightWheelDone = false;
 
 bool foundLine = false;
 bool stop = false;
-float theta = 0;
+double theta = 0;
 
 PID right_pid( kp, ki, kd );
 PID left_pid( kp, ki, kd );
@@ -554,7 +554,7 @@ void rotate(){
 }
 
 void updatePosition(){
-  float d_diff = codeTomm(d_left - d_right);
+  float d_diff = codeTomm(left_encoder - right_encoder);
 
   theta += (d_diff)/WHEEL_SEPERATION;
   float avgDistance = (d_left + d_right)/2;
