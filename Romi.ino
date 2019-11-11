@@ -558,6 +558,9 @@ void rotate(){
 }
 
 void updatePosition(){
+  Serial.print(left_encoder);
+  Serial.print(",");
+  Serial.println(right_encoder);
   float d_diff_l = codeTomm(left_encoder - last_left);
   float d_diff_r = codeTomm(right_encoder - last_right);
 
