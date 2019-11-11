@@ -558,15 +558,12 @@ void rotate(){
 }
 
 void updatePosition(){
-  Serial.print(left_encoder);
-  Serial.print(",");
-  Serial.println(right_encoder);
-  float d_diff_l = codeTomm(left_encoder - last_left);
-  float d_diff_r = codeTomm(right_encoder - last_right);
+  float diff_l = codeTomm(left_encoder - last_left);
+  float diff_r = codeTomm(right_encoder - last_right);
 
-  theta += (d_diff_l - d_diff_r)/(2*WHEEL_SEPERATION);
+  theta += (diff_l - diff_r)/(2*WHEEL_SEPERATION);
   
-  float avgDistance = (d_left + d_right)/2;
+  float avgDistance = (diff_l + diff_r)/2;
 
   position.update(avgDistance, theta);
 
