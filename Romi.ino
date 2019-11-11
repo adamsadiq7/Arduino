@@ -84,7 +84,7 @@ bool rightWheelDone = false;
 
 bool foundLine = false;
 bool stop = false;
-double theta = 0;
+double theta = M_PI/2;
 
 PID right_pid( kp, ki, kd );
 PID left_pid( kp, ki, kd );
@@ -93,7 +93,7 @@ LineSensor left_sensor( A2 );
 LineSensor middle_sensor( A3 );
 LineSensor right_sensor( A4 );
 
-Kinematics position(0,0,0);
+Kinematics position(0,0,theta);
 
 float threshold = -150;
 
@@ -297,7 +297,7 @@ void bangBang(){
 }
 
 float codeTomm(float code){
-  return code * 0.15;
+  return code * (M_PI*70)/1440;
 }
 
 float radiansToDegrees(float radian){
