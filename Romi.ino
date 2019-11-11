@@ -398,12 +398,6 @@ void driveForwards(){
         analogWrite(L_PWM_PIN, 0);
       }
     }
-    else{
-      Serial.println("Tight one lad");
-      // ngl i have no idea
-      right_motor(-1); // backwards
-      left_motor(-1); // backwards
-    }
   }
 }
 
@@ -578,9 +572,16 @@ void rotate(){
 }
 
 
-// void goHome(){ 
+void goHome(){ 
+   float d_diff = codeTomm(d_left - d_right);
 
-// }
+  theta += (d_diff)/WHEEL_SEPERATION;
+
+  position.update(d_right, theta);
+
+  d_right = 0; //resetting gradient for right
+  d_left = 0; //resetting gradient for left
+}
 
 void loop(){
   switch(state) {
@@ -598,12 +599,13 @@ void loop(){
           break;
       case 4:
           setRotate();
+          state = 6;
           break;
       case 5:
           rotate();
           break;
       case 6:
-          // goHome();
+          goHome();
           break;
       default:
           Serial.println("System Error, Unknown state!");
