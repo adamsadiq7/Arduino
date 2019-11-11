@@ -504,9 +504,9 @@ void stopIt(){
   analogWrite(R_PWM_PIN, 0);
   analogWrite(L_PWM_PIN, 0);
 
-  // analogWrite(6, 15);
-  // delay(2000); // buzz for 2 seconds
-  // analogWrite(6, 0);
+  analogWrite(6, 15);
+  delay(2000); // buzz for 2 seconds
+  analogWrite(6, 0);
   state = 4;
 }
 
@@ -515,8 +515,8 @@ void setRotate(){
   updatePosition();
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
-  setLeftAngle(atan(y/x));
-  // setLeftAngle(180); //testing purposes
+  // setLeftAngle(atan(y/x));
+  setLeftAngle(180); //testing purposes
   Serial.println("Angle is set");
   state = 5;
 }
