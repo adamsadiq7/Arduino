@@ -536,13 +536,6 @@ void setRotate(){
 void rotateUntil(){
   updatePosition();
 
-  
-  Serial.println(" ----- "); 
-  Serial.print(theta);
-  Serial.print(",");
-  Serial.print(goal);
-  Serial.println(" ----- "); 
-
   if (theta > goal && !wrongSide){
     wrongSide = true;
   }
@@ -622,12 +615,19 @@ void updatePosition(){
   last_right = right_enc;
 }
 
-void goHome(){ 
+void goHome(){
   updatePosition();
 }
 
 void loop(){
   switch(state) {
+
+      Serial.println(" ----- ");
+      Serial.println(theta);
+      Serial.print(",");
+      Serial.print(goal);
+      Serial.println(" ----- ");
+
       case 0:
           initialisingBeeps();
           break;
