@@ -620,14 +620,15 @@ void goHome(){
 }
 
 void loop(){
+
+  Serial.println(" ----- ");
+  Serial.println(theta);
+  Serial.print(",");
+  Serial.print(goal);
+  Serial.println(" ----- ");
+
+
   switch(state) {
-
-      Serial.println(" ----- ");
-      Serial.println(theta);
-      Serial.print(",");
-      Serial.print(goal);
-      Serial.println(" ----- ");
-
       case 0:
           initialisingBeeps();
           break;
