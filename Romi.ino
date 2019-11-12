@@ -27,9 +27,8 @@
 
 /* Variables to remember our
 motor speeds for Left and Right.*/
-
 float l_speed;
-float r_speed; 
+float r_speed;
 
 float left_goal = 0;
 float right_goal = 0;
@@ -425,7 +424,7 @@ void foundLineBeeps(){
 
   unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-  float turnDemand = 50;
+//  float turnDemand = 50;
   demand = 0.2;
 
   measurement_l = left_velocity;
@@ -552,6 +551,9 @@ void rotateUntil(){
     else{
       analogWrite(R_PWM_PIN, 0);
       analogWrite(L_PWM_PIN, 0);
+      
+      delay(1000);
+      state = 6;
     }
   }
   else{
@@ -564,41 +566,7 @@ void rotateUntil(){
     else{
       analogWrite(R_PWM_PIN, 0);
       analogWrite(L_PWM_PIN, 0);
-      state = 6;
-    }
-  }
-}
-
-void rotate(){
-  /* --- Checking for right wheel ---*/
-  if (right_encoder > right_angle_goal){
-    analogWrite(R_PWM_PIN, abs(SAFE_RIGHT_SPEED));
-  }
-  else{
-    //stop wheel
-    rightWheelDone = true;
-    analogWrite(R_PWM_PIN, 0);
-    //check if other wheel is still turning
-    if (leftWheelDone && rightWheelDone){
-      leftWheelDone = false;
-      rightWheelDone = false;
-      state = 6;
-    }
-  }
-
-  /* --- Checking for left wheel ---*/
-  if (left_encoder < left_angle_goal){
-    analogWrite(L_PWM_PIN, abs(SAFE_LEFT_SPEED));
-  }
-  else{
-    //stop wheel
-    leftWheelDone = true;
-    analogWrite(L_PWM_PIN, 0);
-    //check if other wheel is still turning
-    if (leftWheelDone && rightWheelDone){
-      rotateRight = false;
-      leftWheelDone = false;
-      rightWheelDone = false;
+      delay(1000);
       state = 6;
     }
   }
@@ -623,7 +591,7 @@ void updatePosition(){
 void setDistance(){
   float x = position.getX();
   float y = position.getY();
-  float distance = 1.2 * sqrt(x*x + y*y);
+  float distance = sqrt(x*x + y*y);
   
   left_goal = left_encoder + mmToCode(distance);
   right_goal = right_encoder + mmToCode(distance);
@@ -631,47 +599,92 @@ void setDistance(){
 }
 
 void goHome(){
+
   updatePosition();
+
   if ((right_encoder < right_goal) && (left_encoder < left_goal)){
 
+
+
     float measurement_l = 0;
+
     float measurement_r = 0;
+
     float demand = 0.3;
 
+
+
     measurement_l = left_velocity;
+
     measurement_r = right_velocity;
 
+
+
     float output_l = left_pid.update(demand, measurement_l);
+
     float output_r = right_pid.update(demand, measurement_r);
 
+
+
     if (output_r > 0){
+
       right_motor(1); // forwards
+
     }
+
     else if(output_r < 0){
+
       right_motor(-1); //backwards
+
     }
+
     if (output_l > 0){
+
       left_motor(1); // forwards
+
     }
+
     else if(output_l < 0){
+
       left_motor(-1); //backwards
+
     }
+
+
 
     output_r = constrain(output_r, 0, 255);
+
     output_l = constrain(output_l, 0, 255);
 
-    analogWrite(R_PWM_PIN, SAFE_RIGHT_SPEED);
-    analogWrite(L_PWM_PIN, SAFE_LEFT_SPEED);
+
+
+    analogWrite(R_PWM_PIN, output_r);
+
+    analogWrite(L_PWM_PIN, output_l);
+
  
+
   }
+
   else{
+
     analogWrite(R_PWM_PIN, 0);
+
     analogWrite(L_PWM_PIN, 0);
+
   }
+
+
 
 }
 
+
+
 void loop(){
+
+  Serial.print(theta);
+  Serial.print(",");
+  Serial.println(goal);
 
   switch(state) {
       case 0:
