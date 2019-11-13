@@ -605,7 +605,7 @@ void updatePosition(){
   float diff_l = codeTomm(left_enc - last_left);
   float diff_r = codeTomm(right_enc - last_right);
 
-  theta += ((diff_l) - diff_r)/(2*WHEEL_SEPERATION);
+  theta += (diff_l - diff_r)/(2*WHEEL_SEPERATION);
   theta = fmod(theta,(M_PI * 2));
   float avgDistance = (diff_l + diff_r)/2;
 
