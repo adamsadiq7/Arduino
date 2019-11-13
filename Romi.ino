@@ -419,12 +419,7 @@ void foundLineBeeps(){
   float measurement_l = 0;
   float measurement_r = 0;
 
-  // Get how much time has passed right now.
-  unsigned long time_now = millis();
-
-  unsigned long elapsed_time = time_now - last_timestamp;
   float demand;
-//  float turnDemand = 50;
   demand = 0.2;
 
   measurement_l = left_velocity;
@@ -524,7 +519,12 @@ void setRotate(){
   float x = radiansToDegrees(position.getX());
   float y = radiansToDegrees(position.getY());
   goal = atan2(-y,-x);
-  state = 5;
+  if (state == 8) {
+    state = 9;
+  }
+  else{
+    state = 5;
+  }
 }
 
 
@@ -553,7 +553,12 @@ void rotateUntil(){
       analogWrite(L_PWM_PIN, 0);
       
       delay(1000);
-      state = 6;
+      if (state == 5){
+        state = 6;  
+      }
+      else{
+        state = 10;
+      }
     }
   }
   else{
@@ -567,7 +572,12 @@ void rotateUntil(){
       analogWrite(R_PWM_PIN, 0);
       analogWrite(L_PWM_PIN, 0);
       delay(1000);
-      state = 6;
+      if (state == 5){
+        state = 6;  
+      }
+      else{
+        state = 10;
+      }
     }
   }
 }
@@ -578,7 +588,7 @@ void updatePosition(){
   float diff_l = codeTomm(left_enc - last_left);
   float diff_r = codeTomm(right_enc - last_right);
 
-  theta += ((diff_l) - diff_r)/(2*WHEEL_SEPERATION);
+  theta += ((diff_l) - diff_r)/(WHEEL_SEPERATION);
   theta = fmod(theta,(M_PI * 2));
   float avgDistance = (diff_l + diff_r)/2;
 
@@ -591,11 +601,17 @@ void updatePosition(){
 void setDistance(){
   float x = position.getX();
   float y = position.getY();
-  float distance = sqrt(x*x + y*y);
+  float distance = 1.05 * sqrt(x*x + y*y);
   
   left_goal = left_encoder + mmToCode(distance);
   right_goal = right_encoder + mmToCode(distance);
-  state = 7;
+  
+  if (state == 10){
+    state = 11;
+  }
+  else{
+    state = 7;
+  }
 }
 
 void goHome(){
@@ -604,14 +620,11 @@ void goHome(){
 
   if ((right_encoder < right_goal) && (left_encoder < left_goal)){
 
-
-
     float measurement_l = 0;
 
     float measurement_r = 0;
 
     float demand = 0.3;
-
 
 
     measurement_l = left_velocity;
@@ -669,22 +682,18 @@ void goHome(){
   else{
 
     analogWrite(R_PWM_PIN, 0);
-
     analogWrite(L_PWM_PIN, 0);
-
+    if (state == 7){
+      state = 8;
+    }
   }
-
-
 
 }
 
 
-
 void loop(){
 
-  Serial.print(theta);
-  Serial.print(",");
-  Serial.println(goal);
+  Serial.print(state);
 
   switch(state) {
       case 0:
@@ -711,6 +720,16 @@ void loop(){
       case 7:
           goHome();
           break;
+//      case 8:
+//          setRotate();
+//          break;
+//      case 9:
+//          rotateUntil();
+//      case 10:
+//          setDistance();
+//          break;
+//      case 11:
+//          goHome();
       default:
           Serial.println("System Error, Unknown state!");
           break;
